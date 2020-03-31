@@ -785,13 +785,9 @@ fun main(args: Array<String>) {
                 model("multiModuleHighlighting/multiplatform/", recursive = false, extension = null)
             }
 
-            testClass<AbstractMultiplatformAnalysisTest> {
-                model("multiplatform", recursive = false, extension = null)
-            }
-
             testClass<AbstractQuickFixMultiModuleTest> {
-                model("multiModuleQuickFix", extension = null, deep = 1)
-            }
+            model("multiModuleQuickFix", extension = null, deep = 1)
+        }
 
             testClass<AbstractKotlinGotoImplementationMultiModuleTest> {
                 model("navigation/implementations/multiModule", recursive = false, extension = null)

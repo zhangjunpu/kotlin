@@ -1,12 +1,11 @@
 public final class ClassObjectField /* ClassObjectField*/ {
-  @null()
-  public static final ClassObjectField.Companion Companion;
-
+  @org.jetbrains.annotations.Nullable()
   private static final java.lang.String x;
 
   private static final java.lang.String y;
 
-  @null()
+  public static final ClassObjectField.Companion Companion;
+
   public  ClassObjectField();//  .ctor()
 
 

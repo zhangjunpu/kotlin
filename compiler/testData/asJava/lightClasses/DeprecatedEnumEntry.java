@@ -1,4 +1,4 @@
-public enum E /* p.E*/ {
+public final enum E /* p.E*/ {
   Entry1,
   Entry2,
   Entry3;

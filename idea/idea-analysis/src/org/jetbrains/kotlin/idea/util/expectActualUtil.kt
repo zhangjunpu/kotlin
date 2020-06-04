@@ -66,8 +66,6 @@ fun KtDeclaration.actualDeclarations(): Set<KtDeclaration> =
 fun KtDeclaration.isEffectivelyExpect(): Boolean =
     generateSequence(this) { it.containingClassOrObject }.any { it.hasExpectModifier() }
 
-fun KtDeclaration.hasMatchingExpected() = (toDescriptor() as? MemberDescriptor)?.expectedDescriptor() != null
-
 fun KtDeclaration.isEffectivelyActual(checkConstructor: Boolean = true): Boolean = when {
     hasActualModifier() -> true
     this is KtEnumEntry || checkConstructor && this is KtConstructor<*> -> containingClass()?.hasActualModifier() == true

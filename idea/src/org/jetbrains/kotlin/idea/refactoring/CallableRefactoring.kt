@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.idea.codeInsight.DescriptorToSourceUtilsIde
 import org.jetbrains.kotlin.idea.core.getDeepestSuperDeclarations
 import org.jetbrains.kotlin.idea.core.getDirectlyOverriddenDeclarations
 import org.jetbrains.kotlin.idea.search.declarationsSearch.forEachOverridingElement
-import org.jetbrains.kotlin.idea.util.actualsForExpected
+import org.jetbrains.kotlin.idea.util.actualDeclarations
 import org.jetbrains.kotlin.idea.util.expectedDeclaration
 import org.jetbrains.kotlin.idea.util.expectedDescriptor
 import org.jetbrains.kotlin.idea.util.getResolutionScope
@@ -191,7 +191,7 @@ fun getAffectedCallables(project: Project, descriptorsForChange: Collection<Call
 private fun collectAffectedCallables(declaration: PsiElement, results: MutableCollection<PsiElement>) {
     if (!results.add(declaration)) return
     if (declaration is KtDeclaration) {
-        for (it in declaration.actualsForExpected()) {
+        for (it in declaration.actualDeclarations()) {
             collectAffectedCallables(it, results)
         }
 

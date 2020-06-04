@@ -5,10 +5,7 @@
 
 package org.jetbrains.kotlin.idea.util
 
-import com.intellij.openapi.module.Module
-import org.jetbrains.kotlin.analyzer.ModuleInfo
 import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.idea.caches.project.ModuleSourceInfo
 import org.jetbrains.kotlin.idea.caches.project.implementedDescriptors
 import org.jetbrains.kotlin.idea.caches.project.implementingDescriptors
 import org.jetbrains.kotlin.idea.caches.resolve.resolveToDescriptorIfAny
@@ -46,37 +43,22 @@ fun KtDeclaration.expectedDeclarations(): List<KtDeclaration> =
 fun DeclarationDescriptor.expectedDescriptor(): DeclarationDescriptor? = expectedDescriptors().firstOrNull()
 fun KtDeclaration.expectedDeclaration(): KtDeclaration? = expectedDeclarations().firstOrNull()
 
-fun ModuleDescriptor.hasActualsFor(descriptor: MemberDescriptor) =
-    actualsFor(descriptor).isNotEmpty()
-
-fun ModuleDescriptor.actualsFor(descriptor: MemberDescriptor, checkCompatible: Boolean = false): List<DeclarationDescriptor> =
-    if (checkCompatible) {
-        descriptor.findCompatibleActualForExpected(this@actualsFor)
-    } else {
-        descriptor.findAnyActualForExpected(this@actualsFor)
-    }.filter { (it as? MemberDescriptor)?.isEffectivelyActual() == true }
-
-fun DeclarationDescriptor.actualsForExpected(): Collection<DeclarationDescriptor> {
-    if (this is MemberDescriptor) {
-        if (!this.isExpect) return emptyList()
-
-        return (module.implementingDescriptors + module).flatMap { it.actualsFor(this) }
+fun DeclarationDescriptor.actualDescriptors(): Collection<DeclarationDescriptor> = when (this) {
+    is MemberDescriptor -> {
+        if (!this.isExpect)
+            emptyList()
+        else
+            (module.implementingDescriptors + module).flatMap { findAnyActualForExpected(it) }
     }
-
-    if (this is ValueParameterDescriptor) {
-        return containingDeclaration.actualsForExpected().mapNotNull { (it as? CallableDescriptor)?.valueParameters?.getOrNull(index) }
+    is ValueParameterDescriptor -> {
+        containingDeclaration.actualDescriptors().mapNotNull { (it as? CallableDescriptor)?.valueParameters?.getOrNull(index) }
     }
-
-    return emptyList()
+    else -> emptyList()
 }
 
-fun KtDeclaration.hasAtLeastOneActual() = actualsForExpected().isNotEmpty()
-
-// null means "any platform" here
-fun KtDeclaration.actualsForExpected(module: Module? = null): Set<KtDeclaration> =
+fun KtDeclaration.actualDeclarations(): Set<KtDeclaration> =
     resolveToDescriptorIfAny(BodyResolveMode.FULL)
-        ?.actualsForExpected()
-        ?.filter { module == null || (it.module.getCapability(ModuleInfo.Capability) as? ModuleSourceInfo)?.module == module }
+        ?.actualDescriptors()
         ?.mapNotNullTo(LinkedHashSet()) {
             DescriptorToSourceUtils.descriptorToDeclaration(it) as? KtDeclaration
         } ?: emptySet()
@@ -95,22 +77,22 @@ fun KtDeclaration.isEffectivelyActual(checkConstructor: Boolean = true): Boolean
 fun KtDeclaration.runOnExpectAndAllActuals(checkExpect: Boolean = true, useOnSelf: Boolean = false, f: (KtDeclaration) -> Unit) {
     if (hasActualModifier()) {
         val expectElement = expectedDeclaration()
-        expectElement?.actualsForExpected()?.forEach {
+        expectElement?.actualDeclarations()?.forEach {
             if (it !== this) {
                 f(it)
             }
         }
         expectElement?.let { f(it) }
     } else if (!checkExpect || isEffectivelyExpect()) {
-        actualsForExpected().forEach { f(it) }
+        actualDeclarations().forEach { f(it) }
     }
 
     if (useOnSelf) f(this)
 }
 
 fun KtDeclaration.collectAllExpectAndActualDeclaration(withSelf: Boolean = true): Set<KtDeclaration> = when {
-    isEffectivelyExpect() -> actualsForExpected()
-    hasActualModifier() -> expectedDeclaration()?.let { it.actualsForExpected() + it - this }.orEmpty()
+    isEffectivelyExpect() -> actualDeclarations()
+    hasActualModifier() -> expectedDeclaration()?.let { it.actualDeclarations() + it - this }.orEmpty()
     else -> emptySet()
 }.let { if (withSelf) it + this else it }
 

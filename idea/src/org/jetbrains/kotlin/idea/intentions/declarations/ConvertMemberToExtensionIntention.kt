@@ -31,8 +31,8 @@ import org.jetbrains.kotlin.idea.references.KtReference
 import org.jetbrains.kotlin.idea.util.ImportInsertHelper
 import org.jetbrains.kotlin.idea.util.actualsForExpected
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
-import org.jetbrains.kotlin.idea.util.isExpectDeclaration
-import org.jetbrains.kotlin.idea.util.liftToExpected
+import org.jetbrains.kotlin.idea.util.expectedDeclaration
+import org.jetbrains.kotlin.idea.util.isEffectivelyExpect
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.*
@@ -69,7 +69,7 @@ class ConvertMemberToExtensionIntention : SelfTargetingRangeIntention<KtCallable
     override fun applyTo(element: KtCallableDeclaration, editor: Editor?) {
         var allowExpected = true
 
-        element.liftToExpected()?.actualsForExpected()?.let {
+        element.expectedDeclaration()?.actualsForExpected()?.let {
             if (it.isEmpty()) {
                 allowExpected = askIfExpectedIsAllowed(element.containingKtFile)
             }
@@ -144,7 +144,7 @@ class ConvertMemberToExtensionIntention : SelfTargetingRangeIntention<KtCallable
         val descriptor = element.unsafeResolveToDescriptor()
         val containingClass = descriptor.containingDeclaration as ClassDescriptor
 
-        val isEffectivelyExpected = allowExpected && element.isExpectDeclaration()
+        val isEffectivelyExpected = allowExpected && element.isEffectivelyExpect()
 
         val file = element.containingKtFile
         val project = file.project
@@ -288,7 +288,7 @@ class ConvertMemberToExtensionIntention : SelfTargetingRangeIntention<KtCallable
         element: KtCallableDeclaration,
         allowExpected: Boolean = true
     ): Pair<KtCallableDeclaration, GeneratedBodyType> {
-        val expectedDeclaration = element.liftToExpected() as? KtCallableDeclaration
+        val expectedDeclaration = element.expectedDeclaration() as? KtCallableDeclaration
         if (expectedDeclaration != null) {
             element.withExpectedActuals().filterIsInstance<KtCallableDeclaration>().forEach {
                 if (it != element) {

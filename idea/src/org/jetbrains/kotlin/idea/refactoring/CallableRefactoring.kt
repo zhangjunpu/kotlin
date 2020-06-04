@@ -37,8 +37,9 @@ import org.jetbrains.kotlin.idea.core.getDeepestSuperDeclarations
 import org.jetbrains.kotlin.idea.core.getDirectlyOverriddenDeclarations
 import org.jetbrains.kotlin.idea.search.declarationsSearch.forEachOverridingElement
 import org.jetbrains.kotlin.idea.util.actualsForExpected
+import org.jetbrains.kotlin.idea.util.expectedDeclaration
+import org.jetbrains.kotlin.idea.util.expectedDescriptor
 import org.jetbrains.kotlin.idea.util.getResolutionScope
-import org.jetbrains.kotlin.idea.util.liftToExpected
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -70,7 +71,7 @@ abstract class CallableRefactoring<out T : CallableDescriptor>(
             else -> {
                 throw IllegalStateException("Unexpected callable kind: $kind")
             }
-        }.map { it.liftToExpected() as? CallableDescriptor ?: it }
+        }.map { it.expectedDescriptor() as? CallableDescriptor ?: it }
     }
 
     private fun showSuperFunctionWarningDialog(
@@ -194,7 +195,7 @@ private fun collectAffectedCallables(declaration: PsiElement, results: MutableCo
             collectAffectedCallables(it, results)
         }
 
-        declaration.liftToExpected()?.let { collectAffectedCallables(it, results) }
+        declaration.expectedDeclaration()?.let { collectAffectedCallables(it, results) }
 
         if (declaration !is KtCallableDeclaration) return
         declaration.forEachOverridingElement { _, overridingElement ->

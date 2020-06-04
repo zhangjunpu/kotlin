@@ -90,15 +90,6 @@ fun ModuleDescriptor.actualsFor(descriptor: MemberDescriptor, checkCompatible: B
         }
     }.filter { (it as? MemberDescriptor)?.isEffectivelyActual() == true }
 
-private fun MemberDescriptor.isEffectivelyActual(checkConstructor: Boolean = true): Boolean =
-    isActual || isEnumEntryInActual() || isConstructorInActual(checkConstructor)
-
-private fun MemberDescriptor.isConstructorInActual(checkConstructor: Boolean) =
-    checkConstructor && this is ClassConstructorDescriptor && containingDeclaration.isEffectivelyActual(checkConstructor)
-
-private fun MemberDescriptor.isEnumEntryInActual() =
-    (DescriptorUtils.isEnumEntry(this) && (containingDeclaration as? MemberDescriptor)?.isActual == true)
-
 fun DeclarationDescriptor.actualsForExpected(): Collection<DeclarationDescriptor> {
     if (this is MemberDescriptor) {
         if (!this.isExpect) return emptyList()

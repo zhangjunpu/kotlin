@@ -8,7 +8,6 @@ package org.jetbrains.kotlin.backend.jvm.codegen
 import org.jetbrains.kotlin.backend.common.ir.ir2string
 import org.jetbrains.kotlin.backend.common.lower.BOUND_RECEIVER_PARAMETER
 import org.jetbrains.kotlin.backend.common.lower.BOUND_VALUE_PARAMETER
-import org.jetbrains.kotlin.backend.jvm.JvmBackendContext
 import org.jetbrains.kotlin.backend.jvm.JvmLoweredDeclarationOrigin
 import org.jetbrains.kotlin.backend.jvm.lower.suspendFunctionOriginal
 import org.jetbrains.kotlin.codegen.AsmUtil
@@ -70,7 +69,7 @@ class FunctionCodegen(
         }
 
         if (irFunction.origin != IrDeclarationOrigin.FUNCTION_FOR_DEFAULT_PARAMETER) {
-            object : AnnotationCodegen(classCodegen, context) {
+            object : AnnotationCodegen(classCodegen) {
                 override fun visitAnnotation(descr: String?, visible: Boolean): AnnotationVisitor {
                     return methodVisitor.visitAnnotation(descr, visible)
                 }
@@ -84,7 +83,7 @@ class FunctionCodegen(
             // Not generating parameter annotations for default stubs fixes KT-7892, though
             // this certainly looks like a workaround for a javac bug.
             if (irFunction !is IrConstructor || !irFunction.parentAsClass.shouldNotGenerateConstructorParameterAnnotations()) {
-                generateParameterAnnotations(irFunction, methodVisitor, signature, classCodegen, context)
+                generateParameterAnnotations(irFunction, methodVisitor, signature, classCodegen)
             }
         }
 
@@ -179,12 +178,11 @@ class FunctionCodegen(
 
     private fun generateAnnotationDefaultValueIfNeeded(methodVisitor: MethodVisitor) {
         getAnnotationDefaultValueExpression()?.let { defaultValueExpression ->
-            val annotationCodegen = object : AnnotationCodegen(classCodegen, context) {
+            object : AnnotationCodegen(classCodegen) {
                 override fun visitAnnotation(descr: String?, visible: Boolean): AnnotationVisitor {
                     return methodVisitor.visitAnnotationDefault()
                 }
-            }
-            annotationCodegen.generateAnnotationDefaultValue(defaultValueExpression)
+            }.generateAnnotationDefaultValue(defaultValueExpression)
         }
     }
 
@@ -223,8 +221,7 @@ private fun generateParameterAnnotations(
     irFunction: IrFunction,
     mv: MethodVisitor,
     jvmSignature: JvmMethodSignature,
-    innerClassConsumer: InnerClassConsumer,
-    context: JvmBackendContext
+    classCodegen: ClassCodegen
 ) {
     val iterator = irFunction.valueParameters.iterator()
     val kotlinParameterTypes = jvmSignature.valueParameters
@@ -240,7 +237,7 @@ private fun generateParameterAnnotations(
         }
 
         if (annotated != null && !kind.isSkippedInGenericSignature && !annotated.isSyntheticMarkerParameter()) {
-            object : AnnotationCodegen(innerClassConsumer, context) {
+            object : AnnotationCodegen(classCodegen) {
                 override fun visitAnnotation(descr: String?, visible: Boolean): AnnotationVisitor {
                     return mv.visitParameterAnnotation(
                         i - syntheticParameterCount,

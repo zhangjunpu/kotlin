@@ -195,3 +195,4 @@ org.jetbrains.kotlin.idea.refactoring.move.MoveTestGenerated.testKotlin_moveTopL
 org.jetbrains.kotlin.idea.intentions.IntentionTestGenerated.ConvertSealedClassToEnum.testInstancesOnly, Generated entries reordered,, FLAKY
 org.jetbrains.kotlin.idea.intentions.IntentionTestGenerated.ConvertSealedClassToEnum.testInstancesAndMembers, Enum reorder,, FLAKY
 org.jetbrains.kotlin.idea.debugger.test.KotlinSteppingTestGenerated.Custom.testFunctionBreakpointInStdlib, Output diff,,
+org.jetbrains.kotlin.idea.quickfix.QuickFixTestGenerated.CreateFromUsage.CreateClass.DelegationSpecifier.testCreateSuperClassFromSuperTypeEntry3, Unprocessed,,

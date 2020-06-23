@@ -48,8 +48,8 @@ abstract class AbstractBuildFileGenerationTest : UsefulTestCase() {
         ) { path ->
             val fileContent = path.readFile()
             fileContent.replace(
-                KotlinVersionProviderTestWizardService.TEST_KOTLIN_VERSION.toString(),
-                KOTLIN_VERSION_PLACEHOLDER
+                KOTLIN_VERSION_PLACEHOLDER,
+                KotlinVersionProviderTestWizardService.TEST_KOTLIN_VERSION.toString()
             )
         }
     }

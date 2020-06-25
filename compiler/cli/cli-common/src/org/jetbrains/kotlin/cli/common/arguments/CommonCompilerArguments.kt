@@ -344,7 +344,7 @@ abstract class CommonCompilerArguments : CommonToolArguments() {
         value = "-Xdeserialize-fake-overrides",
         description = "Fallback to deserializing fake overrides"
     )
-    var deserializeFakeOverrides: Boolean by FreezableVar(false)
+    var deserializeFakeOverrides: Boolean by FreezableVar(true)
 
     open fun configureAnalysisFlags(collector: MessageCollector): MutableMap<AnalysisFlag<*>, Any> {
         return HashMap<AnalysisFlag<*>, Any>().apply {

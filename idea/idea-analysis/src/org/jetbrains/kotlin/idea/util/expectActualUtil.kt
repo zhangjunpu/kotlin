@@ -25,7 +25,8 @@ import org.jetbrains.kotlin.resolve.multiplatform.*
 fun DeclarationDescriptor.expectedDescriptors(): List<DeclarationDescriptor> = when {
     this is MemberDescriptor && isExpect -> listOf(this)
 
-    this is MemberDescriptor && isActual -> (module.implementedDescriptors + module).flatMap { findAnyExpectForActual(it) }
+    this is MemberDescriptor && isActual || this is ClassDescriptor && kind == ClassKind.ENUM_ENTRY ->
+        (module.implementedDescriptors + module).flatMap { (this as MemberDescriptor).findAnyExpectForActual(it) }
 
     this is ValueParameterDescriptor -> containingDeclaration.expectedDescriptors().mapNotNull {
         (it as? CallableDescriptor)?.valueParameters?.getOrNull(index)

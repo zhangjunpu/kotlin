@@ -83,7 +83,11 @@ abstract class DeserializedMemberScope protected constructor(
 
     override fun getFunctionNames() = functionNamesLazy
     override fun getVariableNames() = variableNamesLazy
-    override fun getClassifierNames(): Set<Name>? = classNames + typeAliasNames
+    override fun getClassifierNames(): Set<Name>? {
+        val nonDeclaredNames = getNonDeclaredClassifierNames() ?: return null
+
+        return classNames + typeAliasNames + nonDeclaredNames
+    }
 
     override fun definitelyDoesNotContainName(name: Name): Boolean {
         return name !in functionNamesLazy && name !in variableNamesLazy && name !in classNames && name !in typeAliasNames
@@ -256,6 +260,7 @@ abstract class DeserializedMemberScope protected constructor(
 
     protected abstract fun getNonDeclaredFunctionNames(): Set<Name>
     protected abstract fun getNonDeclaredVariableNames(): Set<Name>
+    protected abstract fun getNonDeclaredClassifierNames(): Set<Name>?
 
     protected abstract fun addEnumEntryDescriptors(result: MutableCollection<DeclarationDescriptor>, nameFilter: (Name) -> Boolean)
 

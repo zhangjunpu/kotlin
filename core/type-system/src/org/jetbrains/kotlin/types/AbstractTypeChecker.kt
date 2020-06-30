@@ -28,6 +28,8 @@ abstract class AbstractTypeCheckerContext : TypeSystemContext {
         return type
     }
 
+    open fun customIsSubtypeOf(subType: KotlinTypeMarker, superType: KotlinTypeMarker): Boolean = true
+
     abstract val isErrorTypeEqualsToAnything: Boolean
 
     abstract val isStubTypeEqualsToAnything: Boolean
@@ -174,6 +176,8 @@ object AbstractTypeChecker {
         isFromNullabilityConstraint: Boolean = false
     ): Boolean {
         if (subType === superType) return true
+
+        if (!context.customIsSubtypeOf(subType, superType)) return false
 
         return with(context) {
             completeIsSubTypeOf(prepareType(refineType(subType)), prepareType(refineType(superType)), isFromNullabilityConstraint)
@@ -557,9 +561,9 @@ object AbstractNullabilityChecker {
 
     fun AbstractTypeCheckerContext.hasNotNullSupertype(type: SimpleTypeMarker, supertypesPolicy: SupertypesPolicy) =
         anySupertype(type, {
-            (it.isClassType() && !it.isMarkedNullable()) || it.isDefinitelyNotNullType()
+            (it.isClassType() && !it.isNullableType()) || it.isDefinitelyNotNullType()
         }) {
-            if (it.isMarkedNullable()) SupertypesPolicy.None else supertypesPolicy
+            if (it.isNullableType()) SupertypesPolicy.None else supertypesPolicy
         }
 
     fun TypeCheckerProviderContext.hasPathByNotMarkedNullableNodes(start: SimpleTypeMarker, end: TypeConstructorMarker) =

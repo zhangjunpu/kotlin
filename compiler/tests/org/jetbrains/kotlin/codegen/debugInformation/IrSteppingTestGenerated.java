@@ -350,6 +350,18 @@ public class IrSteppingTestGenerated extends AbstractIrSteppingTest {
     }
 
     @Test
+    @TestMetadata("stringSwitches.kt")
+    public void testStringSwitches() throws Exception {
+        runTest("compiler/testData/debug/stepping/stringSwitches.kt");
+    }
+
+    @Test
+    @TestMetadata("stringSwitchesSmall.kt")
+    public void testStringSwitchesSmall() throws Exception {
+        runTest("compiler/testData/debug/stepping/stringSwitchesSmall.kt");
+    }
+
+    @Test
     @TestMetadata("throwException.kt")
     public void testThrowException() throws Exception {
         runTest("compiler/testData/debug/stepping/throwException.kt");
@@ -413,6 +425,12 @@ public class IrSteppingTestGenerated extends AbstractIrSteppingTest {
     @TestMetadata("whenSubject.kt")
     public void testWhenSubject() throws Exception {
         runTest("compiler/testData/debug/stepping/whenSubject.kt");
+    }
+
+    @Test
+    @TestMetadata("whenSubject2.kt")
+    public void testWhenSubject2() throws Exception {
+        runTest("compiler/testData/debug/stepping/whenSubject2.kt");
     }
 
     @Test

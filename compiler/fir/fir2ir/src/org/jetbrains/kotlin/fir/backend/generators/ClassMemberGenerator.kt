@@ -67,7 +67,6 @@ internal class ClassMemberGenerator(
             if (irClass.isData && klass.getPrimaryConstructorIfAny() != null) {
                 processedCallableNames += DataClassMembersGenerator(components).generateDataClassMembers(klass, irClass)
             }
-            with(fakeOverrideGenerator) { irClass.addFakeOverrides(klass, processedCallableNames) }
             klass.declarations.forEach { declaration ->
                 when {
                     declaration is FirTypeAlias -> {

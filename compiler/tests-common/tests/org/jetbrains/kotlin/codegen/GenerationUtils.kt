@@ -55,6 +55,7 @@ import org.jetbrains.kotlin.fir.resolve.transformers.FirTotalResolveProcessor
 import org.jetbrains.kotlin.ir.backend.jvm.jvmResolveLibraries
 import org.jetbrains.kotlin.ir.backend.jvm.serialization.JvmManglerDesc
 import org.jetbrains.kotlin.ir.backend.jvm.serialization.JvmManglerIr
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.load.kotlin.PackagePartProvider
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.AnalyzingUtils
@@ -152,7 +153,10 @@ object GenerationUtils {
                 generatorExtensions = JvmGeneratorExtensions(),
                 mangler = FirJvmKotlinMangler(session)
             )
-        val fakeOverrideBuilder = FakeOverrideBuilder(symbolTable, IdSignatureSerializer(JvmManglerIr), components.irBuiltIns)
+        val fakeOverrideBuilder = FakeOverrideBuilder(
+            symbolTable, IdSignatureSerializer(JvmManglerIr), components.irBuiltIns,
+            newOrigin = IrDeclarationOrigin.DEFINED
+        )
         fakeOverrideBuilder.provideFakeOverrides(moduleFragment)
         val dummyBindingContext = NoScopeRecordCliBindingTrace().bindingContext
 

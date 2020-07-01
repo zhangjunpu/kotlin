@@ -18,10 +18,7 @@ package org.jetbrains.kotlin.backend.common.overrides
 
 import org.jetbrains.kotlin.backend.common.serialization.signature.IdSignatureSerializer
 import org.jetbrains.kotlin.ir.IrElement
-import org.jetbrains.kotlin.ir.declarations.IrClass
-import org.jetbrains.kotlin.ir.declarations.IrFunction
-import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
-import org.jetbrains.kotlin.ir.declarations.IrOverridableMember
+import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.impl.IrFakeOverrideFunctionImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrFakeOverridePropertyImpl
 import org.jetbrains.kotlin.ir.descriptors.IrBuiltIns
@@ -61,7 +58,8 @@ class FakeOverrideBuilder(
     val symbolTable: SymbolTable,
     val signaturer: IdSignatureSerializer,
     val irBuiltIns: IrBuiltIns,
-    val platformSpecificClassFilter: PlatformFakeOverrideClassFilter = DefaultFakeOverrideClassFilter
+    val platformSpecificClassFilter: PlatformFakeOverrideClassFilter = DefaultFakeOverrideClassFilter,
+    private val newOrigin: IrDeclarationOrigin? = null
 ) : FakeOverrideBuilderStrategy {
     private val haveFakeOverrides = mutableSetOf<IrClass>()
     override val propertyOverriddenSymbols = mutableMapOf<IrOverridableMember, List<IrSymbol>>()
@@ -89,7 +87,7 @@ class FakeOverrideBuilder(
 
         val substitutionMap = typeParameters.zip(typeArguments).toMap()
         val copier =
-            DeepCopyIrTreeWithSymbolsForFakeOverrides(substitutionMap, superType, clazz)
+            DeepCopyIrTreeWithSymbolsForFakeOverrides(substitutionMap, superType, clazz, newOrigin)
 
         val deepCopyFakeOverride = copier.copy(member) as IrOverridableMember
         deepCopyFakeOverride.parent = clazz

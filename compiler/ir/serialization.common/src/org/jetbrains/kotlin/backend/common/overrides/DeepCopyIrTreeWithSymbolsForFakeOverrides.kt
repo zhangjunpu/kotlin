@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.backend.common.DescriptorsToIrRemapper
 import org.jetbrains.kotlin.backend.common.WrappedDescriptorPatcher
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.declarations.IrClass
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrTypeParametersContainer
 import org.jetbrains.kotlin.ir.expressions.IrConstructorCall
 import org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol
@@ -18,7 +19,8 @@ import org.jetbrains.kotlin.ir.visitors.acceptVoid
 class DeepCopyIrTreeWithSymbolsForFakeOverrides(
     val typeArguments: Map<IrTypeParameterSymbol, IrType>,
     val superType: IrType,
-    val parent: IrClass
+    val parent: IrClass,
+    newOrigin: IrDeclarationOrigin? = null
 ) {
 
     fun copy(irElement: IrElement): IrElement {
@@ -99,6 +101,7 @@ class DeepCopyIrTreeWithSymbolsForFakeOverrides(
         FakeOverrideCopier(
             symbolRemapper,
             FakeOverrideTypeRemapper(symbolRemapper, typeArguments),
-            SymbolRenamer.DEFAULT
+            SymbolRenamer.DEFAULT,
+            newOrigin
         )
 }

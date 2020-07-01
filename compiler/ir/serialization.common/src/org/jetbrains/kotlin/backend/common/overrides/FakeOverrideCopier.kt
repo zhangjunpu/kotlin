@@ -1,9 +1,6 @@
 package org.jetbrains.kotlin.backend.common.overrides
 
-import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
-import org.jetbrains.kotlin.ir.declarations.IrFunction
-import org.jetbrains.kotlin.ir.declarations.IrProperty
-import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
+import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.impl.IrFakeOverrideFunctionImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrFakeOverridePropertyImpl
 import org.jetbrains.kotlin.ir.util.*
@@ -11,8 +8,14 @@ import org.jetbrains.kotlin.ir.util.*
 class FakeOverrideCopier(
     symbolRemapper: SymbolRemapper,
     private val typeRemapper: TypeRemapper,
-    private val symbolRenamer: SymbolRenamer
+    private val symbolRenamer: SymbolRenamer,
+    private val newOrigin: IrDeclarationOrigin? = null
 ) : DeepCopyIrTreeWithSymbols(symbolRemapper, typeRemapper, symbolRenamer) {
+
+    override fun mapDeclarationOrigin(declaration: IrDeclaration): IrDeclarationOrigin {
+        if (declaration is IrFunction || declaration is IrProperty) return declaration.origin
+        return newOrigin ?: declaration.origin
+    }
 
     private fun <T : IrFunction> T.transformFunctionChildren(declaration: T): T =
         apply {

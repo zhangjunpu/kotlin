@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.fir.resolve.transformers.FirTotalResolveProcessor
 import org.jetbrains.kotlin.ir.AbstractIrTextTestCase
 import org.jetbrains.kotlin.ir.backend.jvm.serialization.JvmManglerDesc
 import org.jetbrains.kotlin.ir.backend.jvm.serialization.JvmManglerIr
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import java.io.File
 
@@ -96,7 +97,8 @@ abstract class AbstractFir2IrTextTest : AbstractIrTextTestCase() {
             mangler = FirJvmKotlinMangler(session)
         )
         val fakeOverrideBuilder = FakeOverrideBuilder(
-            symbolTable, IdSignatureSerializer(JvmManglerIr), components.irBuiltIns
+            symbolTable, IdSignatureSerializer(JvmManglerIr), components.irBuiltIns,
+            newOrigin = IrDeclarationOrigin.DEFINED
         )
         fakeOverrideBuilder.provideFakeOverrides(irModuleFragment)
 

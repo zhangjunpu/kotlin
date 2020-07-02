@@ -825,6 +825,31 @@ tasks {
         }
     }
 
+    register("kmmTest", AggregateTest::class) {
+        dependsOn(
+            ":idea:idea-gradle:test",
+            ":idea:test",
+            ":compiler:test",
+            ":js:js.tests:test"
+        )
+        if (Ide.IJ193.orHigher())
+            dependsOn(":kotlin-gradle-plugin-integration-tests:test")
+        if (Ide.AS40.orHigher())
+            dependsOn(":kotlin-ultimate:ide:android-studio-native:test")
+
+        testPatternPath = "tests/mpp/kmm-patterns.csv"
+
+        configure()
+
+        gradle.taskGraph.whenReady {
+            allTasks.filterIsInstance<Test>().forEach { testTask -> subTaskConfigure(testTask) }
+
+            if (!project.gradle.startParameter.taskNames.all { findByPath(it) is AggregateTest }) {
+                logger.warn("Please, don't use AggregateTest and non-AggregateTest test tasks together. You can get incorrect results.")
+            }
+        }
+    }
+
     register("test") {
         doLast {
             throw GradleException("Don't use directly, use aggregate tasks *-check instead")

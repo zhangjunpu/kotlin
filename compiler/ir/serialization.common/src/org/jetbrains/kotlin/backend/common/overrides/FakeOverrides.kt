@@ -97,7 +97,7 @@ class FakeOverrideBuilder(
 
     fun buildFakeOverrideChainsForClass(clazz: IrClass) {
         if (haveFakeOverrides.contains(clazz)) return
-        if (!platformSpecificClassFilter.constructFakeOverrides(clazz) || !clazz.symbol.isPublicApi) return
+        if (!platformSpecificClassFilter.constructFakeOverrides(clazz) || !clazz.symbol.isPublicApi || clazz.isInline) return
 
         val superTypes = clazz.superTypes
 

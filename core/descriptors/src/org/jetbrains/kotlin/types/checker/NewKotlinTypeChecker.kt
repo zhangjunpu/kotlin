@@ -149,7 +149,7 @@ object NullabilityChecker {
     fun isSubtypeOfAny(type: UnwrappedType): Boolean =
         SimpleClassicTypeSystemContext
             .newBaseTypeCheckerContext(errorTypesEqualToAnything = false, stubTypesEqualToAnything = true)
-            .hasNotNullSupertype(type.lowerIfFlexible(), SupertypesPolicy.LowerIfFlexible)
+            .hasNotNullSupertype(type.upperIfFlexible(), SupertypesPolicy.UpperIfFlexible)
 }
 
 fun UnwrappedType.hasSupertypeWithGivenTypeConstructor(typeConstructor: TypeConstructor) =

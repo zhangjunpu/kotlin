@@ -38,24 +38,34 @@ class DeclarationGenerator(override val context: GeneratorContext) : Generator {
 
     fun KotlinType.toIrType() = typeTranslator.translateType(this)
 
-    fun generateMemberDeclaration(ktDeclaration: KtDeclaration): IrDeclaration? =
-        when (ktDeclaration) {
-            is KtNamedFunction ->
-                FunctionGenerator(this).generateFunctionDeclaration(ktDeclaration)
-            is KtProperty ->
-                PropertyGenerator(this).generatePropertyDeclaration(ktDeclaration)
-            is KtClassOrObject ->
-                generateClassOrObjectDeclaration(ktDeclaration)
-            is KtTypeAlias ->
-                generateTypeAliasDeclaration(ktDeclaration)
-            is KtScript ->
-                ScriptGenerator(this).generateScriptDeclaration(ktDeclaration)
-            else ->
+    fun generateMemberDeclaration(ktDeclaration: KtDeclaration): IrDeclaration? {
+        return try {
+            when (ktDeclaration) {
+                is KtNamedFunction ->
+                    FunctionGenerator(this).generateFunctionDeclaration(ktDeclaration)
+                is KtProperty ->
+                    PropertyGenerator(this).generatePropertyDeclaration(ktDeclaration)
+                is KtClassOrObject ->
+                    generateClassOrObjectDeclaration(ktDeclaration)
+                is KtTypeAlias ->
+                    generateTypeAliasDeclaration(ktDeclaration)
+                is KtScript ->
+                    ScriptGenerator(this).generateScriptDeclaration(ktDeclaration)
+                else ->
+                    IrErrorDeclarationImpl(
+                        ktDeclaration.startOffsetSkippingComments, ktDeclaration.endOffset,
+                        getOrFail(BindingContext.DECLARATION_TO_DESCRIPTOR, ktDeclaration)
+                    )
+            }
+        } catch (e: Throwable) {
+            if (context.configuration.ignoreErrors) {
                 IrErrorDeclarationImpl(
                     ktDeclaration.startOffsetSkippingComments, ktDeclaration.endOffset,
                     getOrFail(BindingContext.DECLARATION_TO_DESCRIPTOR, ktDeclaration)
                 )
+            } else throw e
         }
+    }
 
     fun generateSyntheticClassOrObject(syntheticDeclaration: KtPureClassOrObject): IrClass {
         return generateClassOrObjectDeclaration(syntheticDeclaration)

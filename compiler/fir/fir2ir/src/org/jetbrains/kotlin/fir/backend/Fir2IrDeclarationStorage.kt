@@ -891,9 +891,21 @@ class Fir2IrDeclarationStorage(
                         return symbol
                     }
                 }
-                createIrFunction(firDeclaration, irParent, origin = parentOrigin).apply {
-                    setAndModifyParent(irParent)
-                }.symbol
+                if (firFunctionSymbol is FirNamedFunctionSymbol && firFunctionSymbol.isFakeOverride) {
+                    createIrFunction(
+                        firDeclaration, irParent,
+                        thisReceiverOwner = findIrParent(firFunctionSymbol.deepestOverriddenSymbol().fir) as? IrClass,
+                        origin = IrDeclarationOrigin.FAKE_OVERRIDE
+                    ).apply {
+                        if (irParent is IrClass && this !in irParent.declarations) {
+                            irParent.declarations += this
+                        }
+                    }.symbol
+                } else {
+                    createIrFunction(firDeclaration, irParent, origin = parentOrigin).apply {
+                        setAndModifyParent(irParent)
+                    }.symbol
+                }
             }
             is FirConstructor -> {
                 getIrConstructorSymbol(firDeclaration.symbol)
@@ -937,9 +949,21 @@ class Fir2IrDeclarationStorage(
                         return symbol
                     }
                 }
-                createIrProperty(fir, irParent, origin = parentOrigin).apply {
-                    setAndModifyParent(irParent)
-                }.symbol
+                if (firVariableSymbol is FirPropertySymbol && firVariableSymbol.isFakeOverride) {
+                    createIrProperty(
+                        fir, irParent,
+                        thisReceiverOwner = findIrParent(firVariableSymbol.deepestOverriddenSymbol().fir) as? IrClass,
+                        origin = IrDeclarationOrigin.FAKE_OVERRIDE
+                    ).apply {
+                        if (irParent is IrClass && this !in irParent.declarations) {
+                            irParent.declarations += this
+                        }
+                    }.symbol
+                } else {
+                    createIrProperty(fir, irParent, origin = parentOrigin).apply {
+                        setAndModifyParent(irParent)
+                    }.symbol
+                }
             }
             is FirField -> {
                 fieldCache[fir]?.let { return it.symbol }

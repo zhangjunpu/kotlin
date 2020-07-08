@@ -253,10 +253,7 @@ FILE fqName:<root> fileName:/useImportedMember.kt
         BRANCH
           if: CALL 'public final fun not (): kotlin.Boolean [operator] declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
             $this: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
-              arg0: CALL 'public final fun <get-fromClass> <T> (): T of <root>.BaseClass.<get-fromClass> declared in <root>.BaseClass' type=kotlin.String origin=GET_PROPERTY
-                <T>: kotlin.String
-                $this: CONST String type=kotlin.String value="10"
-                $receiver: CONST String type=kotlin.String value="10"
+              arg0: ERROR_CALL 'Unresolved reference: <Inapplicable(WRONG_RECEIVER): [/C.fromClass]>#' type=IrErrorType
               arg1: CONST String type=kotlin.String value="10"
           then: RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in <root>'
             CONST String type=kotlin.String value="10"

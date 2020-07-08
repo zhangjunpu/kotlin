@@ -6,10 +6,12 @@
 package org.jetbrains.kotlin.gradle.targets.js.ir
 
 import org.gradle.api.Task
-import org.gradle.api.file.RegularFile
 import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.Sync
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsDce
+import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJsCompilation
 import org.jetbrains.kotlin.gradle.targets.js.dsl.*
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
@@ -21,6 +23,8 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig.Mode
 import org.jetbrains.kotlin.gradle.targets.js.webpack.WebpackDevtool
 import org.jetbrains.kotlin.gradle.tasks.dependsOn
+import org.jetbrains.kotlin.gradle.tasks.locateTask
+import org.jetbrains.kotlin.gradle.utils.lowerCamelCaseName
 import javax.inject.Inject
 
 open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
@@ -73,6 +77,10 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
 
                 val type = binary.mode
 
+                val webpackCompileSync = registerWebpackCompileSync(
+                    binary
+                )
+
                 val runTask = registerSubTargetTask<KotlinWebpack>(
                     disambiguateCamelCased(
                         binary.executeTaskBaseName,
@@ -83,6 +91,7 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
                     it.commonConfigure(
                         compilation = compilation,
                         binary = binary,
+                        webpackCompileSyncTask = webpackCompileSync,
                         configurationActions = commonRunConfigurations,
                         nodeJs = nodeJs
                     )
@@ -133,6 +142,11 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
                 binary as Executable
 
                 val type = binary.mode
+
+                val webpackCompileSync = registerWebpackCompileSync(
+                    binary
+                )
+
                 val webpackTask = registerSubTargetTask<KotlinWebpack>(
                     disambiguateCamelCased(
                         binary.executeTaskBaseName,
@@ -143,6 +157,7 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
                     it.commonConfigure(
                         compilation = compilation,
                         binary = binary,
+                        webpackCompileSyncTask = webpackCompileSync,
                         configurationActions = commonWebpackConfigurations,
                         nodeJs = nodeJs
                     )
@@ -172,9 +187,36 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
             }
     }
 
+    private fun registerWebpackCompileSync(binary: Executable): TaskProvider<Sync> {
+        val compilation = binary.compilation
+        val webpackCompileSyncTaskName = lowerCamelCaseName(
+            compilation.target.disambiguationClassifier,
+            compilation.name.takeIf { it != KotlinCompilation.MAIN_COMPILATION_NAME },
+            binary.name,
+            WEBPACK_COMPILE_COPY
+        )
+
+        return project.locateTask(webpackCompileSyncTaskName)
+            ?: registerSubTargetTask(
+                webpackCompileSyncTaskName
+            ) {
+                it.from(
+                    project.layout.file(binary.linkTask.map { it.destinationDir })
+                )
+
+                it.into(
+                    binary.linkTask.map {
+                        it.destinationDir.parentFile
+                            .resolve(binary.name)
+                    }
+                )
+            }
+    }
+
     private fun KotlinWebpack.commonConfigure(
         compilation: KotlinJsCompilation,
         binary: Executable,
+        webpackCompileSyncTask: TaskProvider<Sync>,
         configurationActions: List<KotlinWebpack.() -> Unit>,
         nodeJs: NodeJsRootExtension
     ) {
@@ -187,7 +229,14 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
 
         configureOptimization(type)
 
-        entryProperty.set(project.layout.file(binary.linkTask.map { it.outputFile }))
+        entryProperty.set(
+            project.layout.file(
+                webpackCompileSyncTask.map {
+                    it.destinationDir
+                        .resolve(binary.linkTask.get().outputFile.name)
+                }
+            )
+        )
 
         configurationActions.forEach { configure ->
             configure()
@@ -221,5 +270,7 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
         private const val WEBPACK_TASK_NAME = "webpack"
         private const val DISTRIBUTE_RESOURCES_TASK_NAME = "distributeResources"
         private const val DISTRIBUTION_TASK_NAME = "distribution"
+
+        private const val WEBPACK_COMPILE_COPY = "webpackCompileSync"
     }
 }

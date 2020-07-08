@@ -117,5 +117,9 @@ internal external class JsObject {
     }
 }
 
+internal fun errorCode(description: String): Nothing {
+    throw IllegalStateException(description)
+}
+
 internal fun <T, R> boxIntrinsic(x: T): R = error("Should be lowered")
 internal fun <T, R> unboxIntrinsic(x: T): R = error("Should be lowered")

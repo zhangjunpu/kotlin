@@ -60,29 +60,12 @@ abstract class FirAbstractImportingScope(
             when (token) {
                 TowerScopeLevel.Token.Functions -> scope.processFunctionsByName(
                     callableId.callableName,
-                ) { symbol ->
-                    if (symbol.callableId == callableId || symbol !is FirNamedFunctionSymbol) {
-                        processor(symbol)
-                    } else {
-                        val overriddenSymbol = FirClassSubstitutionScope.createFakeOverrideFunction(
-                            session, symbol.fir, symbol, derivedClassId = classId
-                        )
-                        processor(overriddenSymbol)
-                    }
-                }
-
+                    processor
+                )
                 TowerScopeLevel.Token.Properties -> scope.processPropertiesByName(
                     callableId.callableName,
-                ) { symbol ->
-                    if (symbol.callableId == callableId || symbol !is FirPropertySymbol) {
-                        processor(symbol)
-                    } else {
-                        val overriddenSymbol = FirClassSubstitutionScope.createFakeOverrideProperty(
-                            session, symbol.fir, symbol, derivedClassId = classId
-                        )
-                        processor(overriddenSymbol)
-                    }
-                }
+                    processor
+                )
             }
         } else if (name.isSpecial || name.identifier.isNotEmpty()) {
             val symbols = provider.getTopLevelCallableSymbols(callableId.packageName, callableId.callableName)

@@ -44,5 +44,5 @@ FILE fqName:<root> fileName:/kt35730.kt
     BLOCK_BODY
       CALL 'public open fun foo (): kotlin.Unit [fake_override] declared in <root>.Derived' type=kotlin.Unit origin=null
         $this: GET_OBJECT 'CLASS OBJECT name:Derived modality:FINAL visibility:public superTypes:[<root>.Base]' type=<root>.Derived
-      CALL 'public open fun foo (): kotlin.Unit declared in <root>.Base' type=kotlin.Unit origin=null
+      CALL 'public open fun foo (): kotlin.Unit [fake_override] declared in <root>.Derived' type=kotlin.Unit origin=null
         $this: GET_OBJECT 'CLASS OBJECT name:Derived modality:FINAL visibility:public superTypes:[<root>.Base]' type=<root>.Derived

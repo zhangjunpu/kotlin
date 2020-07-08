@@ -120,13 +120,13 @@ abstract class AbstractConeSubstitutor : ConeSubstitutor() {
 
 }
 
-fun substitutorByMap(substitution: Map<FirTypeParameterSymbol, ConeKotlinType>): ConeSubstitutor {
+fun substitutorByMap(substitution: Map<FirTypeParameterSymbol, ConeKotlinType>, isForObject: Boolean = false): ConeSubstitutor {
     // If all arguments match parameters, then substitutor isn't needed
     if (substitution.all { (parameterSymbol, argumentType) ->
             (argumentType as? ConeTypeParameterType)?.lookupTag?.typeParameterSymbol == parameterSymbol
         }
     ) return ConeSubstitutor.Empty
-    return ConeSubstitutorByMap(substitution)
+    return ConeSubstitutorByMap(substitution, isForObject)
 }
 
 data class ChainedSubstitutor(private val first: ConeSubstitutor, private val second: ConeSubstitutor) : ConeSubstitutor() {
@@ -142,7 +142,10 @@ fun ConeSubstitutor.chain(other: ConeSubstitutor): ConeSubstitutor {
     return ChainedSubstitutor(this, other)
 }
 
-data class ConeSubstitutorByMap(val substitution: Map<FirTypeParameterSymbol, ConeKotlinType>) : AbstractConeSubstitutor() {
+data class ConeSubstitutorByMap(
+    val substitution: Map<FirTypeParameterSymbol, ConeKotlinType>,
+    override val isForObject: Boolean = false
+) : AbstractConeSubstitutor() {
     override fun substituteType(type: ConeKotlinType): ConeKotlinType? {
         if (type !is ConeTypeParameterType) return null
         return substitution[type.lookupTag.symbol].updateNullabilityIfNeeded(type)

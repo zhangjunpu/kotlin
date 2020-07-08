@@ -125,8 +125,11 @@ class FirClassSubstitutionScope(
             it.returnTypeRef.coneType.substitute(newSubstitutor)
         }
 
-        if (newReceiverType == null && newReturnType == null && newParameterTypes.all { it == null } &&
-            newTypeParameters === member.typeParameters) {
+        if (!substitutor.isForObject &&
+            newReceiverType == null && newReturnType == null &&
+            newParameterTypes.all { it == null } &&
+            newTypeParameters === member.typeParameters
+        ) {
             return original
         }
 
@@ -172,7 +175,7 @@ class FirClassSubstitutionScope(
         if (skipPrivateMembers && member.visibility == Visibilities.PRIVATE) return original
 
         val (newTypeParameters, newReceiverType, newReturnType) = createSubstitutedData(member)
-        if (newReceiverType == null &&
+        if (!substitutor.isForObject && newReceiverType == null &&
             newReturnType == null && newTypeParameters === member.typeParameters
         ) {
             return original

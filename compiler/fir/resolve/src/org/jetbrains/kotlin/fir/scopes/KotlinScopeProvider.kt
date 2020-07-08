@@ -7,10 +7,7 @@ package org.jetbrains.kotlin.fir.scopes
 
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.fir.FirSession
-import org.jetbrains.kotlin.fir.declarations.FirClass
-import org.jetbrains.kotlin.fir.declarations.FirRegularClass
-import org.jetbrains.kotlin.fir.declarations.classId
-import org.jetbrains.kotlin.fir.declarations.isExpect
+import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.resolve.*
 import org.jetbrains.kotlin.fir.resolve.substitution.ConeSubstitutor
 import org.jetbrains.kotlin.fir.resolve.substitution.substitutorByMap
@@ -38,13 +35,18 @@ class KotlinScopeProvider(
             val decoratedDeclaredMemberScope =
                 declaredMemberScopeDecorator(klass, declaredScope, useSiteSession, scopeSession)
 
+            // TODO: what if klass is FirAnonymousObject?
+            // Counting it as object here breaks some FIR black box tests,
+            // mostly because of local parent search
+            val isForObject = klass is FirRegularClass && klass.classKind == ClassKind.OBJECT
             val scopes = lookupSuperTypes(klass, lookupInterfaces = true, deep = false, useSiteSession = useSiteSession)
                 .mapNotNull { useSiteSuperType ->
                     if (useSiteSuperType is ConeClassErrorType) return@mapNotNull null
                     val symbol = useSiteSuperType.lookupTag.toSymbol(useSiteSession)
                     if (symbol is FirRegularClassSymbol) {
+                        val substitutor = substitutor(symbol, useSiteSuperType, useSiteSession, isForObject)
                         symbol.fir.scope(
-                            substitutor(symbol, useSiteSuperType, useSiteSession),
+                            substitutor,
                             useSiteSession, scopeSession,
                             skipPrivateMembers = true,
                             classId = klass.classId,
@@ -66,8 +68,19 @@ class KotlinScopeProvider(
         }
     }
 
-    private fun substitutor(symbol: FirRegularClassSymbol, type: ConeClassLikeType, useSiteSession: FirSession): ConeSubstitutor {
-        if (type.typeArguments.isEmpty()) return ConeSubstitutor.Empty
+    private fun substitutor(
+        symbol: FirRegularClassSymbol,
+        type: ConeClassLikeType,
+        useSiteSession: FirSession,
+        isForObject: Boolean
+    ): ConeSubstitutor {
+        if (type.typeArguments.isEmpty()) {
+            return if (isForObject) {
+                ConeSubstitutor.StubForObject
+            } else {
+                ConeSubstitutor.Empty
+            }
+        }
         val originalSubstitution = createSubstitution(symbol.fir.typeParameters, type.typeArguments, useSiteSession)
         return substitutorByMap(originalSubstitution)
     }
@@ -108,7 +121,6 @@ internal fun FirClass<*>.scope(
     val basicScope = scopeProvider.getUseSiteMemberScope(
         this, useSiteSession, scopeSession
     )
-    if (substitutor == ConeSubstitutor.Empty) return basicScope
 
     return scopeSession.getOrBuild(
         this, ConeSubstitutionScopeKey(classId, isFromExpectClass, substitutor)

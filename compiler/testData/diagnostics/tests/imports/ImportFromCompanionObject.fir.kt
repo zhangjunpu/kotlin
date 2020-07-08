@@ -127,7 +127,7 @@ import a.C3.K.ext
 
 fun testMembersFromSupertypes() {
     f()
-    <!INAPPLICABLE_CANDIDATE!>g<!>("")
+    g("")
     p
     fromI()
 

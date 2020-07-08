@@ -153,7 +153,7 @@ class JavaTypeEnhancement(private val javaResolverSettings: JavaResolverSettings
 
     private fun notNullTypeParameter(enhancedType: SimpleType) =
         if (javaResolverSettings.correctNullabilityForNotNullTypeParameter)
-            enhancedType.makeSimpleTypeDefinitelyNotNullOrNotNull()
+            enhancedType.makeSimpleTypeDefinitelyNotNullOrNotNull(useCorrectedNullabilityForTypeParameters = true)
         else
             NotNullTypeParameter(enhancedType)
 }

@@ -94,11 +94,14 @@ class DefinitelyNotNullType private constructor(val original: SimpleType) : Dele
     DefinitelyNotNullTypeMarker {
 
     companion object {
-        internal fun makeDefinitelyNotNull(type: UnwrappedType): DefinitelyNotNullType? {
+        internal fun makeDefinitelyNotNull(
+            type: UnwrappedType,
+            useCorrectedNullabilityForTypeParameters: Boolean = false
+        ): DefinitelyNotNullType? {
             return when {
                 type is DefinitelyNotNullType -> type
 
-                makesSenseToBeDefinitelyNotNull(type) -> {
+                makesSenseToBeDefinitelyNotNull(type, useCorrectedNullabilityForTypeParameters) -> {
                     if (type is FlexibleType) {
                         assert(type.lowerBound.constructor == type.upperBound.constructor) {
                             "DefinitelyNotNullType for flexible type ($type) can be created only from type variable with the same constructor for bounds"
@@ -113,9 +116,17 @@ class DefinitelyNotNullType private constructor(val original: SimpleType) : Dele
             }
         }
 
-        private fun makesSenseToBeDefinitelyNotNull(type: UnwrappedType): Boolean {
-            if (type.constructor.declarationDescriptor is TypeParameterDescriptor) return TypeUtils.isNullableType(type)
-            return type.canHaveUndefinedNullability() && !NullabilityChecker.isSubtypeOfAny(type)
+        private fun makesSenseToBeDefinitelyNotNull(
+            type: UnwrappedType,
+            useCorrectedNullabilityForFlexibleTypeParameters: Boolean
+        ): Boolean {
+            if (!type.canHaveUndefinedNullability()) return false
+
+            if (useCorrectedNullabilityForFlexibleTypeParameters && type.constructor.declarationDescriptor is TypeParameterDescriptor) {
+                return TypeUtils.isNullableType(type)
+            }
+
+            return !NullabilityChecker.isSubtypeOfAny(type)
         }
 
         private fun UnwrappedType.canHaveUndefinedNullability(): Boolean =
@@ -153,7 +164,7 @@ class DefinitelyNotNullType private constructor(val original: SimpleType) : Dele
 val KotlinType.isDefinitelyNotNullType: Boolean
     get() = unwrap() is DefinitelyNotNullType
 
-fun SimpleType.makeSimpleTypeDefinitelyNotNullOrNotNull(): SimpleType =
+fun SimpleType.makeSimpleTypeDefinitelyNotNullOrNotNull(useCorrectedNullabilityForTypeParameters: Boolean = false): SimpleType =
     DefinitelyNotNullType.makeDefinitelyNotNull(this)
         ?: makeIntersectionTypeDefinitelyNotNullOrNotNull()
         ?: makeNullableAsSpecified(false)

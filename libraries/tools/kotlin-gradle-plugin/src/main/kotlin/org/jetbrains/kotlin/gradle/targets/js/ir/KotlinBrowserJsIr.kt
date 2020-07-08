@@ -77,7 +77,7 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
             .all { binary ->
                 binary as Executable
 
-                val type = binary.mode
+                val mode = binary.mode
 
                 val runCompileSync = registerRunCompileSync(
                     binary
@@ -96,14 +96,14 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
                     }
                     it.commonConfigure(
                         compilation = compilation,
-                        binary = binary,
+                        mode = mode,
                         entryFileProvider = entryFileProvider,
                         configurationActions = commonRunConfigurations,
                         nodeJs = nodeJs
                     )
 
                     it.bin = "webpack-dev-server/bin/webpack-dev-server.js"
-                    it.description = "start ${type.name.toLowerCase()} webpack dev server"
+                    it.description = "start ${mode.name.toLowerCase()} webpack dev server"
 
                     it.devServer = KotlinWebpackConfig.DevServer(
                         open = true,
@@ -113,7 +113,7 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
                     it.outputs.upToDateWhen { false }
                 }
 
-                if (type == KotlinJsBinaryMode.DEVELOPMENT) {
+                if (mode == KotlinJsBinaryMode.DEVELOPMENT) {
                     target.runTask.dependsOn(runTask)
                     commonRunTask.configure {
                         it.dependsOn(runTask)
@@ -147,7 +147,7 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
             .all { binary ->
                 binary as Executable
 
-                val type = binary.mode
+                val mode = binary.mode
                 val webpackTask = registerSubTargetTask<KotlinWebpack>(
                     disambiguateCamelCased(
                         binary.executeTaskBaseName,
@@ -158,7 +158,7 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
                     val entryFileProvider = binary.linkTask.map { it.outputFile }
                     it.commonConfigure(
                         compilation = compilation,
-                        binary = binary,
+                        mode = mode,
                         entryFileProvider = entryFileProvider,
                         configurationActions = commonWebpackConfigurations,
                         nodeJs = nodeJs
@@ -168,11 +168,11 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
                         distributeResourcesTask
                     )
 
-                    it.description = "build webpack ${type.name.toLowerCase()} bundle"
+                    it.description = "build webpack ${mode.name.toLowerCase()} bundle"
                     it._destinationDirectory = distribution.directory
                 }
 
-                if (type == KotlinJsBinaryMode.PRODUCTION) {
+                if (mode == KotlinJsBinaryMode.PRODUCTION) {
                     assembleTaskProvider.dependsOn(webpackTask)
                     val webpackCommonTask = registerSubTargetTask<Task>(
                         disambiguateCamelCased(WEBPACK_TASK_NAME)
@@ -216,19 +216,17 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
 
     private fun KotlinWebpack.commonConfigure(
         compilation: KotlinJsCompilation,
-        binary: Executable,
+        mode: KotlinJsBinaryMode,
         entryFileProvider: Provider<File>,
         configurationActions: List<KotlinWebpack.() -> Unit>,
         nodeJs: NodeJsRootExtension
     ) {
-        val type = binary.mode
-
         dependsOn(
             nodeJs.npmInstallTaskProvider,
             target.project.tasks.named(compilation.processResourcesTaskName)
         )
 
-        configureOptimization(type)
+        configureOptimization(mode)
 
         entryProperty.set(
             project.layout.file(entryFileProvider)
@@ -239,15 +237,15 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
         }
     }
 
-    private fun KotlinWebpack.configureOptimization(kind: KotlinJsBinaryMode) {
-        mode = getByKind(
-            kind = kind,
+    private fun KotlinWebpack.configureOptimization(mode: KotlinJsBinaryMode) {
+        this.mode = getByKind(
+            kind = mode,
             releaseValue = Mode.PRODUCTION,
             debugValue = Mode.DEVELOPMENT
         )
 
         devtool = getByKind(
-            kind = kind,
+            kind = mode,
             releaseValue = WebpackDevtool.SOURCE_MAP,
             debugValue = WebpackDevtool.EVAL_SOURCE_MAP
         )

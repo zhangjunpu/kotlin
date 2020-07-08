@@ -12,7 +12,6 @@ import org.jetbrains.kotlin.analyzer.AbstractAnalyzerWithCompilerReport
 import org.jetbrains.kotlin.analyzer.AnalysisResult
 import org.jetbrains.kotlin.backend.common.LoggingContext
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
-import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContextImpl
 import org.jetbrains.kotlin.backend.common.overrides.FakeOverrideChecker
 import org.jetbrains.kotlin.backend.common.serialization.DeserializationStrategy
@@ -42,6 +41,7 @@ import org.jetbrains.kotlin.ir.symbols.IrSymbol
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.ir.visitors.acceptVoid
 import org.jetbrains.kotlin.js.analyzer.JsAnalysisResult
+import org.jetbrains.kotlin.js.config.ErrorIgnorancePolicy
 import org.jetbrains.kotlin.js.config.JSConfigurationKeys
 import org.jetbrains.kotlin.konan.properties.propertyList
 import org.jetbrains.kotlin.konan.util.KlibMetadataFactories
@@ -107,6 +107,7 @@ fun generateKLib(
     nopack: Boolean
 ) {
     val incrementalDataProvider = configuration.get(JSConfigurationKeys.INCREMENTAL_DATA_PROVIDER)
+    val errorPolicy = configuration.get(JSConfigurationKeys.ERROR_IGNORANCE_POLICY) ?: ErrorIgnorancePolicy.DEFAULT
 
     val icData: List<KotlinFileSerializedData>
     val serializedIrFiles: List<SerializedIrFile>?
@@ -141,7 +142,7 @@ fun generateKLib(
     val depsDescriptors =
         ModulesStructure(project, MainModule.SourceFiles(files), analyzer, configuration, allDependencies, friendDependencies)
 
-    val psi2IrContext = runAnalysisAndPreparePsi2Ir(depsDescriptors)
+    val psi2IrContext = runAnalysisAndPreparePsi2Ir(depsDescriptors, errorPolicy)
     val irBuiltIns = psi2IrContext.irBuiltIns
     val functionFactory = IrFunctionFactory(irBuiltIns, psi2IrContext.symbolTable)
     irBuiltIns.functionFactory = functionFactory
@@ -219,10 +220,11 @@ fun loadIr(
 ): IrModuleInfo {
     val depsDescriptors = ModulesStructure(project, mainModule, analyzer, configuration, allDependencies, friendDependencies)
     val deserializeFakeOverrides = configuration.getBoolean(CommonConfigurationKeys.DESERIALIZE_FAKE_OVERRIDES)
+    val errorPolicy = ErrorIgnorancePolicy.ALL // configuration.get(JSConfigurationKeys.ERROR_IGNORANCE_POLICY) ?: ErrorIgnorancePolicy.DEFAULT
 
     when (mainModule) {
         is MainModule.SourceFiles -> {
-            val psi2IrContext: GeneratorContext = runAnalysisAndPreparePsi2Ir(depsDescriptors)
+            val psi2IrContext: GeneratorContext = runAnalysisAndPreparePsi2Ir(depsDescriptors, errorPolicy)
             val irBuiltIns = psi2IrContext.irBuiltIns
             val symbolTable = psi2IrContext.symbolTable
             val functionFactory = IrFunctionFactory(irBuiltIns, symbolTable)
@@ -287,13 +289,13 @@ fun loadIr(
     }
 }
 
-private fun runAnalysisAndPreparePsi2Ir(depsDescriptors: ModulesStructure): GeneratorContext {
-    val analysisResult = depsDescriptors.runAnalysis()
+private fun runAnalysisAndPreparePsi2Ir(depsDescriptors: ModulesStructure, errorIgnorancePolicy: ErrorIgnorancePolicy): GeneratorContext {
+    val analysisResult = depsDescriptors.runAnalysis(errorIgnorancePolicy)
     val mangler = JsManglerDesc
     val signaturer = IdSignatureDescriptor(mangler)
 
     return createGeneratorContext(
-        Psi2IrConfiguration(),
+        Psi2IrConfiguration(errorIgnorancePolicy.allowErrors),
         analysisResult.moduleDescriptor,
         analysisResult.bindingContext,
         depsDescriptors.compilerConfiguration.languageVersionSettings,
@@ -382,7 +384,7 @@ private class ModulesStructure(
 
     val builtInsDep = allDependencies.getFullList().find { it.isBuiltIns }
 
-    fun runAnalysis(): JsAnalysisResult {
+    fun runAnalysis(errorPolicy: ErrorIgnorancePolicy): JsAnalysisResult {
         require(mainModule is MainModule.SourceFiles)
         val files = mainModule.files
 
@@ -405,10 +407,11 @@ private class ModulesStructure(
             /** can throw [IncrementalNextRoundException] */
             compareMetadataAndGoToNextICRoundIfNeeded(analysisResult, compilerConfiguration, files)
         }
-        if (analyzer.hasErrors() || analysisResult !is JsAnalysisResult)
+
+        if (!errorPolicy.allowErrors || (analyzer.hasErrors() || analysisResult !is JsAnalysisResult))
             throw JsIrCompilationError
 
-        TopDownAnalyzerFacadeForJSIR.checkForErrors(files, analysisResult.bindingContext)
+        TopDownAnalyzerFacadeForJSIR.checkForErrors(files, analysisResult.bindingContext, errorPolicy)
 
         return analysisResult
     }

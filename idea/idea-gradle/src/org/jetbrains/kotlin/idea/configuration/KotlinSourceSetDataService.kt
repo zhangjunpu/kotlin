@@ -37,6 +37,7 @@ import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.platform.konan.NativePlatforms
 import org.jetbrains.plugins.gradle.model.data.BuildScriptClasspathData
 import org.jetbrains.plugins.gradle.model.data.GradleSourceSetData
+import org.jetbrains.plugins.gradle.util.GradleConstants
 
 class KotlinSourceSetDataService : AbstractProjectDataService<GradleSourceSetData, Void>() {
     override fun getTargetDataKey() = GradleSourceSetData.KEY
@@ -122,8 +123,9 @@ class KotlinSourceSetDataService : AbstractProjectDataService<GradleSourceSetDat
             val coroutinesProperty = CoroutineSupport.byCompilerArgument(
                 mainModuleNode.coroutines ?: findKotlinCoroutinesProperty(ideModule.project)
             )
-
-            val kotlinFacet = ideModule.getOrCreateFacet(modelsProvider, false)
+            val compilerArguments = kotlinSourceSet.compilerArguments
+            val id = if (compilerArguments?.multiPlatform == true) GradleConstants.SYSTEM_ID.id else null
+            val kotlinFacet = ideModule.getOrCreateFacet(modelsProvider, false, id)
             kotlinFacet.configureFacet(
                 compilerVersion,
                 coroutinesProperty,
@@ -134,7 +136,6 @@ class KotlinSourceSetDataService : AbstractProjectDataService<GradleSourceSetDat
                 kotlinSourceSet.dependsOn
             )
 
-            val compilerArguments = kotlinSourceSet.compilerArguments
             val defaultCompilerArguments = kotlinSourceSet.defaultCompilerArguments
             if (compilerArguments != null) {
                 applyCompilerArgumentsToFacet(

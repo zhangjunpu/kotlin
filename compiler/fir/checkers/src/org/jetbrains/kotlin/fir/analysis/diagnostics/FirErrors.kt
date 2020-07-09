@@ -6,9 +6,6 @@
 package org.jetbrains.kotlin.fir.analysis.diagnostics
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.descriptors.DescriptorWithRelation
-import org.jetbrains.kotlin.descriptors.EffectiveVisibility
-import org.jetbrains.kotlin.diagnostics.DiagnosticFactory3
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.fir.DeclarationWithRelation
 import org.jetbrains.kotlin.fir.FirEffectiveVisibility
@@ -20,7 +17,7 @@ import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.psi.*
 
 object FirErrors {
-    val UNRESOLVED_REFERENCE by error1<FirSourceElement, PsiElement, String?>()
+    val UNRESOLVED_REFERENCE by error1<FirSourceElement, PsiElement, String>()
     val INAPPLICABLE_CANDIDATE by error1<FirSourceElement, PsiElement, Collection<AbstractFirBasedSymbol<*>>>()
     val AMBIGUITY by error1<FirSourceElement, PsiElement, Collection<AbstractFirBasedSymbol<*>>>()
     val ASSIGN_OPERATOR_AMBIGUITY by error1<FirSourceElement, PsiElement, Collection<AbstractFirBasedSymbol<*>>>()

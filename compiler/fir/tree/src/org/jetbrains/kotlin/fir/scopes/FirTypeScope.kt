@@ -7,8 +7,13 @@ package org.jetbrains.kotlin.fir.scopes
 
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
+import org.jetbrains.kotlin.name.Name
 
 abstract class FirTypeScope : FirScope() {
+    open fun processFunctionsByNameWithoutMatchingOverrides(name: Name, processor: (FirFunctionSymbol<*>) -> Unit) {
+        processFunctionsByName(name, processor)
+    }
+
     // Currently, this function has very weak guarantees
     // - It may silently do nothing on symbols originated from different scope instance
     // - It may return the same overridden symbols more then once in case of substitution

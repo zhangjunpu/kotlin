@@ -38,13 +38,19 @@ class FirTypeIntersectionScope private constructor(
     private val overriddenSymbols: MutableMap<FirCallableSymbol<*>, Collection<FirCallableSymbol<*>>> = mutableMapOf()
 
     override fun processFunctionsByName(name: Name, processor: (FirFunctionSymbol<*>) -> Unit) {
-        if (!processCallablesByName(name, processor, absentFunctions, FirScope::processFunctionsByName)) {
+        if (!processCallablesByName(name, processor, absentFunctions, matchOverrides = true, FirScope::processFunctionsByName)) {
+            super.processFunctionsByName(name, processor)
+        }
+    }
+
+    override fun processFunctionsByNameWithoutMatchingOverrides(name: Name, processor: (FirFunctionSymbol<*>) -> Unit) {
+        if (!processCallablesByName(name, processor, absentFunctions, matchOverrides = false, FirScope::processFunctionsByName)) {
             super.processFunctionsByName(name, processor)
         }
     }
 
     override fun processPropertiesByName(name: Name, processor: (FirVariableSymbol<*>) -> Unit) {
-        if (!processCallablesByName(name, processor, absentProperties, FirScope::processPropertiesByName)) {
+        if (!processCallablesByName(name, processor, absentProperties, matchOverrides = true, FirScope::processPropertiesByName)) {
             super.processPropertiesByName(name, processor)
         }
     }
@@ -53,6 +59,7 @@ class FirTypeIntersectionScope private constructor(
         name: Name,
         noinline processor: (D) -> Unit,
         absentNames: MutableSet<Name>,
+        matchOverrides: Boolean,
         processCallables: FirScope.(Name, (D) -> Unit) -> Unit
     ): Boolean {
         if (name in absentNames) {
@@ -92,7 +99,11 @@ class FirTypeIntersectionScope private constructor(
 
             val mostSpecific = selectMostSpecificMember(extractedOverrides)
             overriddenSymbols[mostSpecific] = extractedOverrides
-            processor(mostSpecific)
+            if (matchOverrides) {
+                processor(mostSpecific)
+            } else {
+                extractedOverrides.forEach { processor(it) }
+            }
         }
 
         return true

@@ -65,7 +65,7 @@ abstract class AbstractFirUseSiteMemberScope(
     private fun computeDirectOverridden(symbol: FirFunctionSymbol<*>): Collection<FirFunctionSymbol<*>> {
         val result = mutableListOf<FirFunctionSymbol<*>>()
         val firSimpleFunction = symbol.fir as? FirSimpleFunction ?: return emptyList()
-        superTypesScope.processFunctionsByName(symbol.callableId.callableName) { superSymbol ->
+        superTypesScope.processFunctionsByNameWithoutMatchingOverrides(symbol.callableId.callableName) { superSymbol ->
             val superFunctionFir = superSymbol.fir
             if (superFunctionFir is FirSimpleFunction &&
                 overrideChecker.isOverriddenFunction(firSimpleFunction, superFunctionFir)

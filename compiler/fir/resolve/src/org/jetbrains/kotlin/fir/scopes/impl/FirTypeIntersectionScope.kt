@@ -241,13 +241,10 @@ class FirTypeIntersectionScope private constructor(
         processor: (FirFunctionSymbol<*>, Int) -> ProcessorAction
     ): ProcessorAction {
         for (directOverridden in getDirectOverriddenSymbols(functionSymbol)) {
+            if (!processor(directOverridden, 0)) return ProcessorAction.STOP
             // TODO: Preserve the scope where directOverridden came from
             for (scope in scopes) {
-                if (!processor(directOverridden, 0)) return ProcessorAction.STOP
-                if (!scope.processOverriddenFunctionsWithDepth(directOverridden) { symbol, depth ->
-                        processor(symbol, depth)
-                    }
-                ) return ProcessorAction.STOP
+                if (!scope.processOverriddenFunctionsWithDepth(directOverridden, processor)) return ProcessorAction.STOP
             }
         }
 

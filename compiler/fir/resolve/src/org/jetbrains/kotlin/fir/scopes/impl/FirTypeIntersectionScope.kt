@@ -27,7 +27,7 @@ import kotlin.collections.HashSet
 class FirTypeIntersectionScope private constructor(
     session: FirSession,
     overrideChecker: FirOverrideChecker,
-    private val scopes: List<FirTypeScope>,
+    internal val scopes: List<FirTypeScope>,
 ) : AbstractFirOverrideScope(session, overrideChecker) {
     private val absentFunctions: MutableSet<Name> = mutableSetOf()
     private val absentProperties: MutableSet<Name> = mutableSetOf()
@@ -232,16 +232,15 @@ class FirTypeIntersectionScope private constructor(
         super.processClassifiersByNameWithSubstitution(name, processor)
     }
 
+    @Suppress("UNCHECKED_CAST")
+    internal fun getDirectOverriddenSymbols(functionSymbol: FirFunctionSymbol<*>): Collection<FirFunctionSymbol<*>> =
+        overriddenSymbols[functionSymbol].orEmpty() as Collection<FirFunctionSymbol<*>>
+
     override fun processOverriddenFunctionsWithDepth(
         functionSymbol: FirFunctionSymbol<*>,
         processor: (FirFunctionSymbol<*>, Int) -> ProcessorAction
     ): ProcessorAction {
-        @Suppress("UNCHECKED_CAST")
-        val directOverriddenSymbols =
-            overriddenSymbols[functionSymbol] as Collection<FirFunctionSymbol<*>>?
-                ?: return ProcessorAction.NEXT
-
-        for (directOverridden in directOverriddenSymbols) {
+        for (directOverridden in getDirectOverriddenSymbols(functionSymbol)) {
             // TODO: Preserve the scope where directOverridden came from
             for (scope in scopes) {
                 if (!processor(directOverridden, 0)) return ProcessorAction.STOP

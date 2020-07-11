@@ -140,7 +140,37 @@ abstract class AbstractFirUseSiteMemberScope(
     override fun processOverriddenFunctionsWithDepth(
         functionSymbol: FirFunctionSymbol<*>,
         processor: (FirFunctionSymbol<*>, Int) -> ProcessorAction
-    ): ProcessorAction = doProcessOverriddenFunctions(functionSymbol, processor, directOverridden, superTypesScope)
+    ): ProcessorAction {
+        val directOverridden = directOverridden[functionSymbol]
+            ?: return superTypesScope.processOverriddenFunctionsWithDepth(functionSymbol, processor)
+        val allDirectOverridden = if (superTypesScope is FirTypeIntersectionScope) {
+            directOverridden + directOverridden.map { superTypesScope.getDirectOverriddenSymbols(it) }.flatten()
+        } else {
+            directOverridden
+        }
+
+        for ((index, overridden) in allDirectOverridden.withIndex()) {
+            val overriddenDepth = if (overridden is FirNamedFunctionSymbol && overridden.isFakeOverride) 0 else 1
+            if (!processor(overridden, overriddenDepth)) return ProcessorAction.STOP
+            if (index < directOverridden.size) {
+                if (superTypesScope is FirTypeIntersectionScope) continue
+                if (!superTypesScope.processOverriddenFunctionsWithDepth(overridden) { symbol, depth ->
+                        processor(symbol, depth + overriddenDepth)
+                    }
+                ) return ProcessorAction.STOP
+            } else {
+                val intersectedScopes = (superTypesScope as FirTypeIntersectionScope).scopes
+                for (scope in intersectedScopes) {
+                    if (!scope.processOverriddenFunctionsWithDepth(overridden) { symbol, depth ->
+                            processor(symbol, depth + overriddenDepth)
+                        }
+                    ) return ProcessorAction.STOP
+                }
+            }
+        }
+
+        return superTypesScope.processOverriddenFunctionsWithDepth(functionSymbol, processor)
+    }
 
     override fun processClassifiersByNameWithSubstitution(name: Name, processor: (FirClassifierSymbol<*>, ConeSubstitutor) -> Unit) {
         declaredMemberScope.processClassifiersByNameWithSubstitution(name, processor)

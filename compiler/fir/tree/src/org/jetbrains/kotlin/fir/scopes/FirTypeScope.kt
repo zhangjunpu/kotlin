@@ -17,7 +17,6 @@ abstract class FirTypeScope : FirScope() {
     // of the overridden tree
     abstract fun processOverriddenFunctionsWithDepth(
         functionSymbol: FirFunctionSymbol<*>,
-        baseSymbol: FirFunctionSymbol<*>? = null,
         processor: (FirFunctionSymbol<*>, Int) -> ProcessorAction
     ): ProcessorAction
 
@@ -47,24 +46,23 @@ abstract class FirTypeScope : FirScope() {
         baseScope: FirTypeScope
     ): ProcessorAction {
         val directOverridden = directOverriddenMap[functionSymbol]
-            ?: return baseScope.processOverriddenFunctionsWithDepth(functionSymbol, null, processor)
+            ?: return baseScope.processOverriddenFunctionsWithDepth(functionSymbol, processor)
 
         for (overridden in directOverridden) {
             val overriddenDepth = if (overridden is FirNamedFunctionSymbol && overridden.isFakeOverride) 0 else 1
             if (!processor(overridden, overriddenDepth)) return ProcessorAction.STOP
-            if (!baseScope.processOverriddenFunctionsWithDepth(overridden, functionSymbol) { symbol, depth ->
+            if (!baseScope.processOverriddenFunctionsWithDepth(overridden) { symbol, depth ->
                     processor(symbol, depth + overriddenDepth)
                 }
             ) return ProcessorAction.STOP
         }
 
-        return baseScope.processOverriddenFunctionsWithDepth(functionSymbol, null, processor)
+        return baseScope.processOverriddenFunctionsWithDepth(functionSymbol, processor)
     }
 
     object Empty : FirTypeScope() {
         override fun processOverriddenFunctionsWithDepth(
             functionSymbol: FirFunctionSymbol<*>,
-            baseSymbol: FirFunctionSymbol<*>?,
             processor: (FirFunctionSymbol<*>, Int) -> ProcessorAction
         ): ProcessorAction = ProcessorAction.NEXT
     }

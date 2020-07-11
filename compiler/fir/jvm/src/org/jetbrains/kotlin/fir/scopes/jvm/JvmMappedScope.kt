@@ -44,7 +44,6 @@ class JvmMappedScope(
     // So, we put here a stub implementation
     override fun processOverriddenFunctionsWithDepth(
         functionSymbol: FirFunctionSymbol<*>,
-        baseSymbol: FirFunctionSymbol<*>?,
         processor: (FirFunctionSymbol<*>, Int) -> ProcessorAction
     ) = ProcessorAction.NONE
 

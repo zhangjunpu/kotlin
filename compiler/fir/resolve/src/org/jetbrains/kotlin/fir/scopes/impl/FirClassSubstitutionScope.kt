@@ -66,6 +66,7 @@ class FirClassSubstitutionScope(
 
     override fun processOverriddenFunctionsWithDepth(
         functionSymbol: FirFunctionSymbol<*>,
+        baseSymbol: FirFunctionSymbol<*>?,
         processor: (FirFunctionSymbol<*>, Int) -> ProcessorAction
     ): ProcessorAction {
         val unwrapped = functionSymbol.overriddenSymbol as FirFunctionSymbol<*>? ?: functionSymbol

@@ -75,6 +75,7 @@ class JavaClassMembersEnhancementScope(
 
     override fun processOverriddenFunctionsWithDepth(
         functionSymbol: FirFunctionSymbol<*>,
+        baseSymbol: FirFunctionSymbol<*>?,
         processor: (FirFunctionSymbol<*>, Int) -> ProcessorAction
     ): ProcessorAction = doProcessOverriddenFunctions(functionSymbol, processor, overriddenFunctions, useSiteMemberScope)
 }

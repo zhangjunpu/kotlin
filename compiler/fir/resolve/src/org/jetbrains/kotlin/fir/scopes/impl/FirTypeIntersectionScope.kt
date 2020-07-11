@@ -238,14 +238,22 @@ class FirTypeIntersectionScope private constructor(
 
     override fun processOverriddenFunctionsWithDepth(
         functionSymbol: FirFunctionSymbol<*>,
+        baseSymbol: FirFunctionSymbol<*>?,
         processor: (FirFunctionSymbol<*>, Int) -> ProcessorAction
     ): ProcessorAction {
         for (directOverridden in getDirectOverriddenSymbols(functionSymbol)) {
-            if (!processor(directOverridden, 0)) return ProcessorAction.STOP
+            var depthModifier = 0
+            if (functionSymbol is FirNamedFunctionSymbol && functionSymbol.isFakeOverride) {
+                depthModifier++
+            }
+            if (baseSymbol != null && directOverridden is FirNamedFunctionSymbol && directOverridden.isFakeOverride) {
+                depthModifier--
+            }
+            if (!processor(directOverridden, depthModifier)) return ProcessorAction.STOP
             // TODO: Preserve the scope where directOverridden came from
             for (scope in scopes) {
                 if (!scope.processOverriddenFunctionsWithDepth(directOverridden) { symbol, depth ->
-                        processor(symbol, depth)
+                        processor(symbol, depth + depthModifier)
                     }
                 ) return ProcessorAction.STOP
             }

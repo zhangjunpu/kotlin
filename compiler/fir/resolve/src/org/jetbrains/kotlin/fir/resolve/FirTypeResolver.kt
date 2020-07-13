@@ -13,6 +13,6 @@ import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.fir.types.FirTypeRef
 
 interface FirTypeResolver : FirSessionComponent {
-    fun resolveType(typeRef: FirTypeRef, scope: FirScope): ConeKotlinType
+    fun resolveType(typeRef: FirTypeRef, scope: FirScope, areBareTypesAllowed: Boolean): ConeKotlinType
     fun resolveToSymbol(typeRef: FirTypeRef, scope: FirScope): Pair<FirClassifierSymbol<*>?, ConeSubstitutor?>
 }

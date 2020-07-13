@@ -192,36 +192,7 @@ fun FirClassifierSymbol<*>.constructType(
 fun FirClassifierSymbol<*>.constructType(parts: List<FirQualifierPart>, isNullable: Boolean): ConeKotlinType =
     constructType(parts.toTypeProjections(), isNullable)
 
-fun FirClassifierSymbol<*>.constructType(
-    parts: List<FirQualifierPart>,
-    isNullable: Boolean,
-    symbolOriginSession: FirSession,
-    attributes: ConeAttributes = ConeAttributes.Empty,
-    substitutor: ConeSubstitutor? = null
-): ConeKotlinType {
-    var typeArguments = parts.toTypeProjections()
-    if (this is FirRegularClassSymbol) {
-        if (typeArguments.size != fir.typeParameters.size) {
-            @Suppress("NAME_SHADOWING")
-            val substitutor = substitutor ?: ConeSubstitutor.Empty
-            val n = fir.typeParameters.size - typeArguments.size
-            val argumentsFromOuterClassesAndParents = fir.typeParameters.takeLast(n).map {
-                val type = ConeTypeParameterTypeImpl(ConeTypeParameterLookupTag(it.symbol), isNullable = false)
-                substitutor.substituteOrSelf(type)
-            }.toTypedArray<ConeTypeProjection>()
-            typeArguments += argumentsFromOuterClassesAndParents
-        }
-    }
-    return constructType(typeArguments, isNullable, attributes)
-        .also {
-            val lookupTag = it.lookupTag
-            if (lookupTag is ConeClassLikeLookupTagImpl && this is FirClassLikeSymbol<*>) {
-                lookupTag.bindSymbolToLookupTag(symbolOriginSession.firSymbolProvider, this)
-            }
-        }
-}
-
-private fun List<FirQualifierPart>.toTypeProjections(): Array<ConeTypeProjection> =
+fun List<FirQualifierPart>.toTypeProjections(): Array<ConeTypeProjection> =
     asReversed().flatMap { it.typeArguments.map { typeArgument -> typeArgument.toConeTypeProjection() } }.toTypedArray()
 
 fun FirFunction<*>.constructFunctionalTypeRef(isSuspend: Boolean = false): FirResolvedTypeRef {

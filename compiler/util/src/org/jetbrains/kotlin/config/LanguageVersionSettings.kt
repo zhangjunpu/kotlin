@@ -152,7 +152,7 @@ enum class LanguageFeature(
     SamConversionForKotlinFunctions(sinceVersion = KOTLIN_1_4),
     SamConversionPerArgument(sinceVersion = KOTLIN_1_4),
     FunctionReferenceWithDefaultValueAsOtherType(sinceVersion = KOTLIN_1_4),
-    NonStrictOnlyInputTypesChecks(sinceVersion = KOTLIN_1_4),
+    NonStrictOnlyInputTypesChecks(sinceVersion = KOTLIN_1_4, defaultState = State.DISABLED),
     SuspendConversion(sinceVersion = KOTLIN_1_4, defaultState = State.DISABLED),
     UnitConversion(sinceVersion = KOTLIN_1_4, defaultState = State.DISABLED),
     OverloadResolutionByLambdaReturnType(sinceVersion = KOTLIN_1_4),

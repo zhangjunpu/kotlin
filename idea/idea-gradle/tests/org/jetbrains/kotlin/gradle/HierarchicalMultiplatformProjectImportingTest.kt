@@ -10,6 +10,7 @@ import org.jetbrains.jps.model.java.JavaResourceRootType
 import org.jetbrains.jps.model.java.JavaSourceRootType
 import org.jetbrains.kotlin.config.*
 import org.jetbrains.kotlin.idea.codeInsight.gradle.MultiplePluginVersionGradleImportingTestCase
+import org.jetbrains.kotlin.konan.target.KonanTarget
 import org.jetbrains.kotlin.platform.js.JsPlatforms
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.platform.konan.NativePlatforms
@@ -100,6 +101,7 @@ class HierarchicalMultiplatformProjectImportingTest : MultiplePluginVersionGradl
                 moduleDependency("my-app.commonMain", DependencyScope.TEST)
                 moduleDependency("my-app.commonTest", DependencyScope.TEST)
                 moduleDependency("my-app.jsMain", DependencyScope.TEST)
+                moduleDependency("my-app.jsMain", DependencyScope.RUNTIME)
                 moduleDependency("my-app.jvmAndJsMain", DependencyScope.TEST)
                 moduleDependency("my-app.jvmAndJsTest", DependencyScope.TEST)
                 moduleDependency("my-app.linuxAndJsMain", DependencyScope.TEST)
@@ -159,6 +161,7 @@ class HierarchicalMultiplatformProjectImportingTest : MultiplePluginVersionGradl
                 moduleDependency("my-app.jvmAndJsMain", DependencyScope.TEST)
                 moduleDependency("my-app.jvmAndJsTest", DependencyScope.TEST)
                 moduleDependency("my-app.jvmMain", DependencyScope.TEST)
+                moduleDependency("my-app.jvmMain", DependencyScope.RUNTIME)
                 sourceFolder("src/jvmTest/kotlin", JavaSourceRootType.TEST_SOURCE)
                 sourceFolder("src/jvmTest/resources", JavaResourceRootType.TEST_RESOURCE)
             }
@@ -187,7 +190,7 @@ class HierarchicalMultiplatformProjectImportingTest : MultiplePluginVersionGradl
 
             module("my-app.linuxX64Main") {
                 isHMPP(true)
-                targetPlatform(NativePlatforms.unspecifiedNativePlatform)
+                targetPlatform(NativePlatforms.nativePlatformBySingleTarget(KonanTarget.LINUX_X64))
                 libraryDependency("Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:${gradleKotlinPluginVersion}", DependencyScope.COMPILE)
                 libraryDependency("Kotlin/Native ${gradleKotlinPluginVersion} - builtin [linux_x64]", DependencyScope.PROVIDED)
                 libraryDependency("Kotlin/Native ${gradleKotlinPluginVersion} - iconv [linux_x64]", DependencyScope.PROVIDED)
@@ -203,7 +206,7 @@ class HierarchicalMultiplatformProjectImportingTest : MultiplePluginVersionGradl
 
             module("my-app.linuxX64Test") {
                 isHMPP(true)
-                targetPlatform(NativePlatforms.unspecifiedNativePlatform)
+                targetPlatform(NativePlatforms.nativePlatformBySingleTarget(KonanTarget.LINUX_X64))
                 libraryDependency("Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:${gradleKotlinPluginVersion}", DependencyScope.TEST)
                 libraryDependency("Gradle: org.jetbrains.kotlin:kotlin-test-annotations-common:${gradleKotlinPluginVersion}", DependencyScope.TEST)
                 libraryDependency("Gradle: org.jetbrains.kotlin:kotlin-test-common:${gradleKotlinPluginVersion}", DependencyScope.TEST)

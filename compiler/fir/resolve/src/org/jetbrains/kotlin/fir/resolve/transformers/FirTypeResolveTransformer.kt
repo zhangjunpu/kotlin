@@ -118,7 +118,9 @@ class FirTypeResolveTransformer(
     }
 
     override fun transformTypeRef(typeRef: FirTypeRef, data: Nothing?): CompositeTransformResult<FirTypeRef> {
-        return typeRef.transform(typeResolverTransformer, towerScope)
+        return typeResolverTransformer.transformTypeRef(typeRef, towerScope)
+//        TODO: think about it
+//        return typeRef.transform(typeResolverTransformer, towerScope)
     }
 
     override fun transformValueParameter(valueParameter: FirValueParameter, data: Nothing?): CompositeTransformResult<FirStatement> {

@@ -110,8 +110,8 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
                         RUN_TASK_NAME
                     ),
                     listOf(compilation)
-                ) {
-                    it.commonConfigure(
+                ) { task ->
+                    task.commonConfigure(
                         compilation = compilation,
                         dceTaskProvider = dceTaskProvider,
                         devDceTaskProvider = devDceTaskProvider,
@@ -120,15 +120,15 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
                         nodeJs = nodeJs
                     )
 
-                    it.bin = "webpack-dev-server/bin/webpack-dev-server.js"
-                    it.description = "start ${type.name.toLowerCase()} webpack dev server"
+                    task.bin = "webpack-dev-server/bin/webpack-dev-server.js"
+                    task.description = "start ${type.name.toLowerCase()} webpack dev server"
 
-                    it.devServer = KotlinWebpackConfig.DevServer(
+                    task.devServer = KotlinWebpackConfig.DevServer(
                         open = true,
                         contentBase = listOf(compilation.output.resourcesDir.canonicalPath)
                     )
 
-                    it.outputs.upToDateWhen { false }
+                    task.outputs.upToDateWhen { false }
                 }
 
                 if (type == KotlinJsBinaryMode.DEVELOPMENT) {
@@ -173,8 +173,8 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
 
                     ),
                     listOf(compilation)
-                ) {
-                    it.commonConfigure(
+                ) { task ->
+                    task.commonConfigure(
                         compilation = compilation,
                         dceTaskProvider = dceTaskProvider,
                         devDceTaskProvider = devDceTaskProvider,
@@ -183,14 +183,14 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
                         nodeJs = nodeJs
                     )
 
-                    it.dependsOn(
+                    task.dependsOn(
                         distributeResourcesTask
                     )
 
-                    it.configureOptimization(type)
+                    task.configureOptimization(type)
 
-                    it.description = "build webpack ${type.name.toLowerCase()} bundle"
-                    it._destinationDirectory = distribution.directory
+                    task.description = "build webpack ${type.name.toLowerCase()} bundle"
+                    task._destinationDirectory = distribution.directory
                 }
 
                 if (type == KotlinJsBinaryMode.PRODUCTION) {

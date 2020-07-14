@@ -100,11 +100,15 @@ class FirTypeResolverImpl(private val session: FirSession) : FirTypeResolver {
                 @Suppress("NAME_SHADOWING")
                 val substitutor = substitutor ?: ConeSubstitutor.Empty
                 val n = symbol.fir.typeParameters.size - typeArguments.size
-                val argumentsFromOuterClassesAndParents = symbol.fir.typeParameters.takeLast(n).map {
-                    val type = ConeTypeParameterTypeImpl(ConeTypeParameterLookupTag(it.symbol), isNullable = false)
-                    substitutor.substituteOrNull(type) ?: ConeClassErrorType("Type argument not defined")
-                }.toTypedArray<ConeTypeProjection>()
-                typeArguments += argumentsFromOuterClassesAndParents
+                if (n < 0) {
+                    typeArguments = (1..symbol.fir.typeParameters.size).map { ConeClassErrorType("Type arguments number mismatch") }.toTypedArray()
+                } else {
+                    val argumentsFromOuterClassesAndParents = symbol.fir.typeParameters.takeLast(n).map {
+                        val type = ConeTypeParameterTypeImpl(ConeTypeParameterLookupTag(it.symbol), isNullable = false)
+                        substitutor.substituteOrNull(type) ?: ConeClassErrorType("Type argument not defined")
+                    }.toTypedArray<ConeTypeProjection>()
+                    typeArguments += argumentsFromOuterClassesAndParents
+                }
             }
         }
         return symbol.constructType(typeArguments, typeRef.isMarkedNullable, typeRef.annotations.computeTypeAttributes())

@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.gradle.targets.js.subtargets
 
+import org.gradle.api.GradleException
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Task
 import org.gradle.api.plugins.ExtensionAware
@@ -43,17 +44,20 @@ abstract class KotlinJsSubTarget(
 
     protected val taskGroupName = "Kotlin $disambiguationClassifier"
 
-    private val produceExecutable: Unit by lazy {
-        configureMain()
+    private var isExecutable: Boolean = false
+
+    private val produceExecutableDelegate: Unit by lazy {
+        isExecutable = true
     }
 
     internal fun produceExecutable() {
-        produceExecutable
+        produceExecutableDelegate
     }
 
     internal fun configure() {
         NpmResolverPlugin.apply(project)
 
+        configureMain()
         configureTests()
 
         target.compilations.all {
@@ -152,6 +156,34 @@ abstract class KotlinJsSubTarget(
     }
 
     protected abstract fun configureMain(compilation: KotlinJsCompilation)
+
+    internal inline fun <reified T : Task> registerExecutableTask(
+        name: String,
+        args: List<Any> = emptyList(),
+        noinline body: (T) -> (Unit)
+    ): TaskProvider<T> =
+        registerSubTargetTask(
+            name = name,
+            args = args,
+            body = {
+                it.doFirst {
+                    if (!isExecutable) {
+                        throw GradleException(
+                            """
+                            Task '$name' is accessible only for executable output.
+                            Probably you need to configure executable for project '${project.name} (${project.path})'
+                            kotlin {
+                                js {
+                                    binaries.executable()
+                                }
+                            }
+                            """.trimIndent()
+                        )
+                    }
+                }
+                body(it)
+            }
+        )
 
     internal inline fun <reified T : Task> registerSubTargetTask(
         name: String,

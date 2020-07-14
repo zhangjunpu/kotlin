@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.gradle.targets.js.subtargets
 
 import org.gradle.api.Task
-import org.gradle.api.file.RegularFile
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
@@ -98,13 +97,15 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
         val project = compilation.target.project
         val nodeJs = NodeJsRootPlugin.apply(project.rootProject)
 
-        val commonRunTask = registerSubTargetTask<Task>(disambiguateCamelCased(RUN_TASK_NAME)) {}
+        val commonRunTask = registerExecutableTask<Task>(
+            disambiguateCamelCased(RUN_TASK_NAME)
+        ) {}
 
         compilation.binaries
             .all { binary ->
                 val type = binary.mode
 
-                val runTask = registerSubTargetTask<KotlinWebpack>(
+                val runTask = registerExecutableTask<KotlinWebpack>(
                     disambiguateCamelCased(
                         binary.executeTaskBaseName,
                         RUN_TASK_NAME
@@ -159,6 +160,19 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
             it.into(distribution.directory)
         }
 
+        val webpackCommonTaskProvider = registerExecutableTask<Task>(
+            disambiguateCamelCased(WEBPACK_TASK_NAME)
+        ) {}
+
+        registerExecutableTask<Task>(
+            disambiguateCamelCased(DISTRIBUTION_TASK_NAME)
+        ) {
+            it.dependsOn(webpackCommonTaskProvider)
+            it.dependsOn(distributeResourcesTask)
+
+            it.outputs.dir(distribution.directory)
+        }
+
         val assembleTaskProvider = project.tasks.named(LifecycleBasePlugin.ASSEMBLE_TASK_NAME)
         assembleTaskProvider.dependsOn(distributeResourcesTask)
 
@@ -166,7 +180,7 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
             .all { binary ->
                 val type = binary.mode
 
-                val webpackTask = registerSubTargetTask<KotlinWebpack>(
+                val webpackTask = registerExecutableTask<KotlinWebpack>(
                     disambiguateCamelCased(
                         binary.executeTaskBaseName,
                         WEBPACK_TASK_NAME
@@ -195,16 +209,8 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
 
                 if (type == KotlinJsBinaryMode.PRODUCTION) {
                     assembleTaskProvider.dependsOn(webpackTask)
-                    val webpackCommonTask = registerSubTargetTask<Task>(
-                        disambiguateCamelCased(WEBPACK_TASK_NAME)
-                    ) {
+                    webpackCommonTaskProvider.configure {
                         it.dependsOn(webpackTask)
-                    }
-                    registerSubTargetTask<Task>(disambiguateCamelCased(DISTRIBUTION_TASK_NAME)) {
-                        it.dependsOn(webpackCommonTask)
-                        it.dependsOn(distributeResourcesTask)
-
-                        it.outputs.dir(distribution.directory)
                     }
                 }
             }

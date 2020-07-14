@@ -29,8 +29,6 @@ object AndroidSinglePlatformModuleConfigurator :
     AndroidModuleConfigurator {
     override val moduleKind: ModuleKind get() = ModuleKind.singleplatformAndroid
 
-    var useTests: Boolean = false
-
     @NonNls
     override val id = "android"
 
@@ -87,12 +85,6 @@ object AndroidSinglePlatformModuleConfigurator :
             version = Versions.ANDROID.ANDROIDX_CONSTRAINTLAYOUT,
             dependencyType = DependencyType.MAIN
         )
-
-        +ArtifactBasedLibraryDependencyIR(
-            MavenArtifact(DefaultRepository.MAVEN_CENTRAL, "junit", "junit"),
-            version = Versions.JUNIT,
-            dependencyType = DependencyType.TEST
-        )
     }
 
     override fun Writer.runArbitraryTask(
@@ -109,16 +101,6 @@ object AndroidSinglePlatformModuleConfigurator :
             "package" to javaPackage.asCodePackage(),
             "sharedPackage" to sharedPackage?.asCodePackage()
         )
-
-        if (useTests) {
-            TemplatesPlugin::addFileTemplate.execute(
-                FileTemplate(
-                    AndroidModuleConfigurator.FileTemplateDescriptors.greetingTestKt(
-                        javaPackage
-                    ), modulePath, settings
-                )
-            )
-        }
 
         TemplatesPlugin::addFileTemplates.execute(
             listOf(

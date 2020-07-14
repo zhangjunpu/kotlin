@@ -67,6 +67,8 @@ val ModuleConfigurator.moduleType: ModuleType?
     get() = safeAs<ModuleConfiguratorWithModuleType>()?.moduleType
 
 object MppModuleConfigurator : ModuleConfigurator {
+    var useTests: Boolean = false
+
     override val moduleKind = ModuleKind.multiplatform
 
     @NonNls
@@ -116,13 +118,20 @@ object MppModuleConfigurator : ModuleConfigurator {
             "src" / "commonMain" / "kotlin" / "common.kt"
         )
 
+        if (useTests) {
+            TemplatesPlugin::addFileTemplates.execute(
+                listOf(
+                    FileTemplate(androidTestKt, modulePath, settings),
+                    FileTemplate(iosTestKt, modulePath, settings)
+                )
+            )
+        }
+
         TemplatesPlugin::addFileTemplates.execute(
             listOf(
                 FileTemplate(androidKt, modulePath, settings),
-                FileTemplate(androidTestKt, modulePath, settings),
                 FileTemplate(commonKt, modulePath, settings),
                 FileTemplate(iosKt, modulePath, settings),
-                FileTemplate(iosTestKt, modulePath, settings)
             )
         )
     }

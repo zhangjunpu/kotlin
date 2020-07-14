@@ -70,7 +70,9 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
         val project = compilation.target.project
         val nodeJs = NodeJsRootPlugin.apply(project.rootProject)
 
-        val commonRunTask = registerSubTargetTask<Task>(disambiguateCamelCased(RUN_TASK_NAME)) {}
+        val commonRunTask = registerExecutableTask<Task>(
+            disambiguateCamelCased(RUN_TASK_NAME)
+        ) {}
 
         compilation.binaries
             .matching { it is Executable }
@@ -83,7 +85,7 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
                     binary
                 )
 
-                val runTask = registerSubTargetTask<KotlinWebpack>(
+                val runTask = registerExecutableTask<KotlinWebpack>(
                     disambiguateCamelCased(
                         binary.executeTaskBaseName,
                         RUN_TASK_NAME
@@ -130,6 +132,10 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
 
         val processResourcesTask = target.project.tasks.named(compilation.processResourcesTaskName)
 
+        val webpackCommonTaskProvider = registerExecutableTask<Task>(
+            disambiguateCamelCased(WEBPACK_TASK_NAME)
+        ) {}
+
         val distributeResourcesTask = registerSubTargetTask<Copy>(
             disambiguateCamelCased(
                 DISTRIBUTE_RESOURCES_TASK_NAME
@@ -137,6 +143,13 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
         ) {
             it.from(processResourcesTask)
             it.into(distribution.directory)
+        }
+
+        registerExecutableTask<Task>(disambiguateCamelCased(DISTRIBUTION_TASK_NAME)) {
+            it.dependsOn(webpackCommonTaskProvider)
+            it.dependsOn(distributeResourcesTask)
+
+            it.outputs.dir(distribution.directory)
         }
 
         val assembleTaskProvider = project.tasks.named(LifecycleBasePlugin.ASSEMBLE_TASK_NAME)
@@ -174,16 +187,8 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
 
                 if (mode == KotlinJsBinaryMode.PRODUCTION) {
                     assembleTaskProvider.dependsOn(webpackTask)
-                    val webpackCommonTask = registerSubTargetTask<Task>(
-                        disambiguateCamelCased(WEBPACK_TASK_NAME)
-                    ) {
+                    webpackCommonTaskProvider.configure {
                         it.dependsOn(webpackTask)
-                    }
-                    registerSubTargetTask<Task>(disambiguateCamelCased(DISTRIBUTION_TASK_NAME)) {
-                        it.dependsOn(webpackCommonTask)
-                        it.dependsOn(distributeResourcesTask)
-
-                        it.outputs.dir(distribution.directory)
                     }
                 }
             }
@@ -198,7 +203,7 @@ open class KotlinBrowserJsIr @Inject constructor(target: KotlinJsIrTarget) :
             RUN_COMPILE_COPY
         )
 
-        return registerSubTargetTask(
+        return registerExecutableTask(
             runCompileSyncTaskName
         ) { task ->
             task.from(

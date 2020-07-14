@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.gradle.targets.js.ir
 
+import org.gradle.api.GradleException
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Task
 import org.gradle.api.plugins.ExtensionAware
@@ -45,6 +46,7 @@ abstract class KotlinJsIrSubTarget(
     internal fun configure() {
         NpmResolverPlugin.apply(project)
 
+        configureMain()
         configureTests()
 
         target.compilations.all {
@@ -59,8 +61,10 @@ abstract class KotlinJsIrSubTarget(
         }
     }
 
+    private var isExecutable: Boolean = false
+
     private val produceExecutable: Unit by lazy {
-        configureMain()
+        isExecutable = true
     }
 
     internal fun produceExecutable() {
@@ -169,6 +173,34 @@ abstract class KotlinJsIrSubTarget(
     protected abstract fun configureRun(compilation: KotlinJsIrCompilation)
 
     protected abstract fun configureBuild(compilation: KotlinJsIrCompilation)
+
+    internal inline fun <reified T : Task> registerExecutableTask(
+        name: String,
+        args: List<Any> = emptyList(),
+        noinline body: (T) -> (Unit)
+    ): TaskProvider<T> =
+        registerSubTargetTask(
+            name = name,
+            args = args,
+            body = {
+                it.doFirst {
+                    if (!isExecutable) {
+                        throw GradleException(
+                            """
+                            Task '$name' is accessible only for executable output.
+                            Probably you need to configure executable for project '${project.name} (${project.path})'
+                            kotlin {
+                                js {
+                                    binaries.executable()
+                                }
+                            }
+                            """.trimIndent()
+                        )
+                    }
+                }
+                body(it)
+            }
+        )
 
     internal inline fun <reified T : Task> registerSubTargetTask(
         name: String,

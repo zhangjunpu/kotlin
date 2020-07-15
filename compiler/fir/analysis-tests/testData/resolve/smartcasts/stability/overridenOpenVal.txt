@@ -1,6 +1,6 @@
 FILE: overridenOpenVal.kt
     public open class A : R|kotlin/Any| {
-        public constructor(x: R|kotlin/Any|): R|A| {
+        constructor(x: R|kotlin/Any|): R|A| {
             super<R|kotlin/Any|>()
         }
 
@@ -9,7 +9,7 @@ FILE: overridenOpenVal.kt
 
     }
     public final class B : R|A| {
-        public constructor(x: R|kotlin/Any|): R|B| {
+        constructor(x: R|kotlin/Any|): R|B| {
             super<R|A|>(R|<local>/x|)
         }
 

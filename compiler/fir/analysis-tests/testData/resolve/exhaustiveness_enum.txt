@@ -1,6 +1,6 @@
 FILE: exhaustiveness_enum.kt
     public final enum class Enum : R|kotlin/Enum<Enum>| {
-        private constructor(): R|Enum| {
+        constructor(): R|Enum| {
             super<R|kotlin/Enum<Enum>|>()
         }
 

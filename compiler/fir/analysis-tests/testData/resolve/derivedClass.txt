@@ -1,6 +1,6 @@
 FILE: derivedClass.kt
     public open class Base<T1> : R|kotlin/Any| {
-        public constructor<T1>(x: R|T1|): R|Base<T1>| {
+        constructor<T1>(x: R|T1|): R|Base<T1>| {
             super<R|kotlin/Any|>()
         }
 
@@ -9,7 +9,7 @@ FILE: derivedClass.kt
 
     }
     public final class Derived<T2 : R|kotlin/Any|> : R|Base<T2>| {
-        public constructor<T2 : R|kotlin/Any|>(x: R|T2|): R|Derived<T2>| {
+        constructor<T2 : R|kotlin/Any|>(x: R|T2|): R|Derived<T2>| {
             super<R|Base<T2>|>(R|<local>/x|)
         }
 

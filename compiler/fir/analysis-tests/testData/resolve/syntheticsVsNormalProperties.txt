@@ -1,18 +1,18 @@
 FILE: main.kt
     public open class Executor : R|kotlin/Any| {
-        public constructor(): R|Executor| {
+        constructor(): R|Executor| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class CommandExecutor : R|Executor| {
-        public constructor(): R|CommandExecutor| {
+        constructor(): R|CommandExecutor| {
             super<R|Executor|>()
         }
 
     }
     public final class B : R|A| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|A|>()
         }
 

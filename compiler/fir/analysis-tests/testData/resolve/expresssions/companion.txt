@@ -1,11 +1,11 @@
 FILE: companion.kt
     public open class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|A.Companion| {
+            constructor(): R|A.Companion| {
                 super<R|kotlin/Any|>()
             }
 
@@ -23,12 +23,12 @@ FILE: companion.kt
 
     }
     public final class B : R|kotlin/Any| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object Companion : R|A| {
-            private constructor(): R|B.Companion| {
+            constructor(): R|B.Companion| {
                 super<R|A|>()
             }
 

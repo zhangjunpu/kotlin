@@ -1,11 +1,11 @@
 FILE: qualifierWithCompanion.kt
     public final class A : R|kotlin/Any| {
-        public constructor(): R|my/A| {
+        constructor(): R|my/A| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object X : R|kotlin/Any| {
-            private constructor(): R|my/A.X| {
+            constructor(): R|my/A.X| {
                 super<R|kotlin/Any|>()
             }
 

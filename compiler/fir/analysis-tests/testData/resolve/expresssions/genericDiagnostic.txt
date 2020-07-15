@@ -1,6 +1,6 @@
 FILE: test.kt
     public final class Fix : R|kotlin/Any| {
-        public constructor(e: R|DerivedElement|): R|Fix| {
+        constructor(e: R|DerivedElement|): R|Fix| {
             super<R|kotlin/Any|>()
         }
 

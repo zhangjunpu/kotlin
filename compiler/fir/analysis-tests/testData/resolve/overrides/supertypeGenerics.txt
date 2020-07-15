@@ -4,7 +4,7 @@ FILE: supertypeGenerics.kt
 
     }
     public abstract class Base<E> : R|kotlin/Any| {
-        public constructor<E>(): R|Base<E>| {
+        constructor<E>(): R|Base<E>| {
             super<R|kotlin/Any|>()
         }
 
@@ -13,7 +13,7 @@ FILE: supertypeGenerics.kt
 
     }
     public final class C : R|Base<kotlin/String>|, R|I<kotlin/String>| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|Base<kotlin/String>|>()
         }
 

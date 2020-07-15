@@ -1,6 +1,6 @@
 FILE: threeReceivers.kt
     public final class Bar : R|kotlin/Any| {
-        public constructor(): R|Bar| {
+        constructor(): R|Bar| {
             super<R|kotlin/Any|>()
         }
 
@@ -10,19 +10,19 @@ FILE: threeReceivers.kt
 
     }
     public final class Buz : R|kotlin/Any| {
-        public constructor(): R|Buz| {
+        constructor(): R|Buz| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class FooBar : R|kotlin/Any| {
-        public constructor(): R|FooBar| {
+        constructor(): R|FooBar| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class Foo : R|kotlin/Any| {
-        public constructor(): R|Foo| {
+        constructor(): R|Foo| {
             super<R|kotlin/Any|>()
         }
 

@@ -1,11 +1,11 @@
 FILE: innerClassHierarchy.kt
     public open class Base : R|kotlin/Any| {
-        public constructor(): R|Base| {
+        constructor(): R|Base| {
             super<R|kotlin/Any|>()
         }
 
         public open inner class Inner : R|kotlin/Any| {
-            public constructor(): R|Base.Inner| {
+            constructor(): R|Base.Inner| {
                 super<R|kotlin/Any|>()
             }
 
@@ -13,22 +13,22 @@ FILE: innerClassHierarchy.kt
 
     }
     public final class Derived : R|Base| {
-        public constructor(): R|Derived| {
+        constructor(): R|Derived| {
             super<R|Base|>()
         }
 
         public final inner class InnerDerived : R|Base.Inner| {
-            public constructor(): R|Derived.InnerDerived| {
+            constructor(): R|Derived.InnerDerived| {
                 this@R|/Derived|.super<R|Base.Inner|>()
             }
 
             public final inner class VeryInner : R|Base.Inner| {
-                public constructor(): R|Derived.InnerDerived.VeryInner| {
+                constructor(): R|Derived.InnerDerived.VeryInner| {
                     this@R|/Derived|.super<R|Base.Inner|>()
                 }
 
                 public final inner class VeryVeryInner : R|Base.Inner| {
-                    public constructor(): R|Derived.InnerDerived.VeryInner.VeryVeryInner| {
+                    constructor(): R|Derived.InnerDerived.VeryInner.VeryVeryInner| {
                         this@R|/Derived|.super<R|Base.Inner|>()
                     }
 
@@ -40,7 +40,7 @@ FILE: innerClassHierarchy.kt
 
     }
     public open class A : R|kotlin/Any| {
-        public constructor(s: R|kotlin/String|): R|A| {
+        constructor(s: R|kotlin/String|): R|A| {
             super<R|kotlin/Any|>()
         }
 
@@ -48,35 +48,35 @@ FILE: innerClassHierarchy.kt
             public get(): R|kotlin/String|
 
         public open inner class B : R|A| {
-            public constructor(s: R|kotlin/String|): R|A.B| {
+            constructor(s: R|kotlin/String|): R|A.B| {
                 super<R|A|>(R|<local>/s|)
             }
 
         }
 
         public open inner class C : R|A.B| {
-            public constructor(s: R|kotlin/String|, additional: R|kotlin/Double|): R|A.C| {
+            constructor(s: R|kotlin/String|, additional: R|kotlin/Double|): R|A.C| {
                 this@R|/A|.super<R|A.B|>(R|<local>/s|)
             }
 
         }
 
         public open inner class D : R|A.C| {
-            public constructor(other: R|kotlin/Int|, another: R|kotlin/Long|, s: R|kotlin/String|): R|A.D| {
+            constructor(other: R|kotlin/Int|, another: R|kotlin/Long|, s: R|kotlin/String|): R|A.D| {
                 this@R|/A|.super<R|A.C|>(R|<local>/s|, R|<local>/another|.R|kotlin/Long.toDouble|())
             }
 
         }
 
         public open inner class E : R|A.D| {
-            public constructor(): R|A.E| {
+            constructor(): R|A.E| {
                 this@R|/A|.super<R|A.D|>(Int(0), Long(42), String(OK))
             }
 
         }
 
         public final inner class F : R|A.E| {
-            public constructor(): R|A.F| {
+            constructor(): R|A.F| {
                 this@R|/A|.super<R|A.E|>()
             }
 

@@ -215,7 +215,9 @@ class FirRenderer(builder: StringBuilder, private val mode: RenderMode = RenderM
     override fun visitMemberDeclaration(memberDeclaration: FirMemberDeclaration) {
         memberDeclaration.annotations.renderAnnotations()
         if (memberDeclaration !is FirProperty || !memberDeclaration.isLocal) {
-            print(memberDeclaration.visibility.asString(memberDeclaration.effectiveVisibility) + " ")
+            // we can't access session.effectiveVisibilityResolver from here!
+//            print(memberDeclaration.visibility.asString(memberDeclaration.getEffectiveVisibility3(memberDeclaration.session, null)) + " ")
+            print(memberDeclaration.visibility.asString() + " ")
             print(memberDeclaration.modalityAsString() + " ")
         }
         if (memberDeclaration.isExpect) {
@@ -401,7 +403,7 @@ class FirRenderer(builder: StringBuilder, private val mode: RenderMode = RenderM
 
     override fun visitConstructor(constructor: FirConstructor) {
         constructor.annotations.renderAnnotations()
-        print(constructor.visibility.asString(constructor.effectiveVisibility) + " ")
+//        print(constructor.visibility.asString(constructor.effectiveVisibility) + " ")
         if (constructor.isExpect) {
             print("expect ")
         }

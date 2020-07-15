@@ -1,18 +1,18 @@
 FILE: referenceToExtension.kt
     public final class GenericTest : R|kotlin/Any| {
-        public constructor(): R|GenericTest| {
+        constructor(): R|GenericTest| {
             super<R|kotlin/Any|>()
         }
 
         public final class A<T> : R|kotlin/Any| {
-            public constructor<T>(): R|GenericTest.A<T>| {
+            constructor<T>(): R|GenericTest.A<T>| {
                 super<R|kotlin/Any|>()
             }
 
         }
 
         public final class B<T> : R|kotlin/Any| {
-            public constructor<T>(): R|GenericTest.B<T>| {
+            constructor<T>(): R|GenericTest.B<T>| {
                 super<R|kotlin/Any|>()
             }
 
@@ -46,19 +46,19 @@ FILE: referenceToExtension.kt
 
     }
     public final class NoGenericTest : R|kotlin/Any| {
-        public constructor(): R|NoGenericTest| {
+        constructor(): R|NoGenericTest| {
             super<R|kotlin/Any|>()
         }
 
         public final class A : R|kotlin/Any| {
-            public constructor(): R|NoGenericTest.A| {
+            constructor(): R|NoGenericTest.A| {
                 super<R|kotlin/Any|>()
             }
 
         }
 
         public final class B : R|kotlin/Any| {
-            public constructor(): R|NoGenericTest.B| {
+            constructor(): R|NoGenericTest.B| {
                 super<R|kotlin/Any|>()
             }
 

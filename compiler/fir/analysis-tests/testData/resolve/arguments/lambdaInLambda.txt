@@ -1,6 +1,6 @@
 FILE: lambdaInLambda.kt
     public final class StringBuilder : R|kotlin/Any| {
-        public constructor(): R|StringBuilder| {
+        constructor(): R|StringBuilder| {
             super<R|kotlin/Any|>()
         }
 
@@ -13,7 +13,7 @@ FILE: lambdaInLambda.kt
     public abstract interface Template<in X> : R|kotlin/Any| {
     }
     public final class KDocTemplate : R|Template<StringBuilder>| {
-        public constructor(): R|KDocTemplate| {
+        constructor(): R|KDocTemplate| {
             super<R|kotlin/Any|>()
         }
 

@@ -1,12 +1,12 @@
 FILE: varargProjection.kt
     public open class Base : R|kotlin/Any| {
-        public constructor(): R|Base| {
+        constructor(): R|Base| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class Sub : R|Base| {
-        public constructor(): R|Sub| {
+        constructor(): R|Sub| {
             super<R|Base|>()
         }
 

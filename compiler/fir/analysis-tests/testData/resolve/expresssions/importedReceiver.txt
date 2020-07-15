@@ -10,7 +10,7 @@ FILE: importedReceiver.kt
 
     }
     public final object My : R|Your<kotlin/Double>| {
-        private constructor(): R|My| {
+        constructor(): R|My| {
             super<R|kotlin/Any|>()
         }
 

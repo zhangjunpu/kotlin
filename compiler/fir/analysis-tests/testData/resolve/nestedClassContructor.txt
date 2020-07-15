@@ -1,11 +1,11 @@
 FILE: nestedClassContructor.kt
     public open class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
         public final class B : R|A| {
-            public constructor(): R|A.B| {
+            constructor(): R|A.B| {
                 super<R|A|>()
             }
 
@@ -16,7 +16,7 @@ FILE: nestedClassContructor.kt
         }
 
         public open class C : R|kotlin/Any| {
-            public constructor(): R|A.C| {
+            constructor(): R|A.C| {
                 super<R|kotlin/Any|>()
             }
 
@@ -28,7 +28,7 @@ FILE: nestedClassContructor.kt
 
     }
     public final class D : R|A.C| {
-        public constructor(): R|D| {
+        constructor(): R|D| {
             super<R|A.C|>()
         }
 
@@ -40,7 +40,7 @@ FILE: nestedClassContructor.kt
 
     }
     public final class E : R|A| {
-        public constructor(): R|E| {
+        constructor(): R|E| {
             super<R|A|>()
         }
 

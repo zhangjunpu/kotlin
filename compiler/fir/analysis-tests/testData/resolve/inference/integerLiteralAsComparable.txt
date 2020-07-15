@@ -1,6 +1,6 @@
 FILE: main.kt
     public final class K<T : R|kotlin/Comparable<T>|> : R|kotlin/Any| {
-        public constructor<T : R|kotlin/Comparable<T>|>(t: R|T|): R|K<T>| {
+        constructor<T : R|kotlin/Comparable<T>|>(t: R|T|): R|K<T>| {
             super<R|kotlin/Any|>()
         }
 

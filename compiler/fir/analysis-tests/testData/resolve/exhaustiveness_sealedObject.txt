@@ -1,18 +1,18 @@
 FILE: exhaustiveness_sealedObject.kt
     public sealed class A : R|kotlin/Any| {
-        private constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class B : R|A| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|A|>()
         }
 
     }
     public final object C : R|A| {
-        private constructor(): R|C| {
+        constructor(): R|C| {
             super<R|A|>()
         }
 

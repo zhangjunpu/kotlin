@@ -1,16 +1,16 @@
 FILE: nestedObjects.kt
     public final object A : R|kotlin/Any| {
-        private constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
         public final object B : R|kotlin/Any| {
-            private constructor(): R|A.B| {
+            constructor(): R|A.B| {
                 super<R|kotlin/Any|>()
             }
 
             public final object A : R|kotlin/Any| {
-                private constructor(): R|A.B.A| {
+                constructor(): R|A.B.A| {
                     super<R|kotlin/Any|>()
                 }
 
@@ -20,7 +20,7 @@ FILE: nestedObjects.kt
 
     }
     public final object B : R|kotlin/Any| {
-        private constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 

@@ -1,11 +1,11 @@
 FILE: singletonConstructors.kt
     public final class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object Comp : R|kotlin/Any| {
-            private constructor(): R|A.Comp| {
+            constructor(): R|A.Comp| {
                 super<R|kotlin/Any|>()
             }
 
@@ -17,7 +17,7 @@ FILE: singletonConstructors.kt
 
     }
     public final object B : R|kotlin/Any| {
-        private constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 
@@ -26,12 +26,12 @@ FILE: singletonConstructors.kt
 
     }
     public final class D : R|kotlin/Any| {
-        public constructor(): R|D| {
+        constructor(): R|D| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object Comp2 : R|kotlin/Any| {
-            private constructor(): R|D.Comp2| {
+            constructor(): R|D.Comp2| {
                 super<R|kotlin/Any|>()
             }
 
@@ -46,12 +46,12 @@ FILE: singletonConstructors.kt
 
     }
     public final enum class E : R|kotlin/Enum<E>| {
-        private constructor(): R|E| {
+        constructor(): R|E| {
             super<R|kotlin/Enum<E>|>()
         }
 
         public final static enum entry X: R|E| = object : R|E| {
-            private[local] constructor(): R|<anonymous>| {
+            constructor(): R|<anonymous>| {
                 super<R|E|>()
             }
 

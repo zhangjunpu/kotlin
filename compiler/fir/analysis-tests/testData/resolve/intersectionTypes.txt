@@ -4,13 +4,13 @@ FILE: intersectionTypes.kt
     public abstract interface B : R|kotlin/Any| {
     }
     public final class Clazz1 : R|A|, R|B| {
-        public constructor(): R|Clazz1| {
+        constructor(): R|Clazz1| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class Clazz2 : R|A|, R|B| {
-        public constructor(): R|Clazz2| {
+        constructor(): R|Clazz2| {
             super<R|kotlin/Any|>()
         }
 

@@ -1,11 +1,11 @@
 FILE: qualifiedExpressions.kt
     public final class C : R|kotlin/Any| {
-        public constructor(): R|a/b/C| {
+        constructor(): R|a/b/C| {
             super<R|kotlin/Any|>()
         }
 
         public final object D : R|kotlin/Any| {
-            private constructor(): R|a/b/C.D| {
+            constructor(): R|a/b/C.D| {
                 super<R|kotlin/Any|>()
             }
 
@@ -15,7 +15,7 @@ FILE: qualifiedExpressions.kt
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|a/b/C.Companion| {
+            constructor(): R|a/b/C.Companion| {
                 super<R|kotlin/Any|>()
             }
 
@@ -29,7 +29,7 @@ FILE: qualifiedExpressions.kt
 
     }
     public final enum class E : R|kotlin/Enum<a/b/E>| {
-        private constructor(): R|a/b/E| {
+        constructor(): R|a/b/E| {
             super<R|kotlin/Enum<a/b/E>|>()
         }
 

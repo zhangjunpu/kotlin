@@ -1,11 +1,11 @@
 FILE: exposedTypeAlias.kt
     public final class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
         private final inner class Inner : R|kotlin/Any| {
-            public[private] constructor(): R|A.Inner| {
+            constructor(): R|A.Inner| {
                 super<R|kotlin/Any|>()
             }
 
@@ -13,14 +13,14 @@ FILE: exposedTypeAlias.kt
 
     }
     public final class B : R|kotlin/Any| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 
         public final typealias AInner = R|A.Inner|
 
         public final inner class Inner : R|kotlin/Any| {
-            public constructor(): R|B.Inner| {
+            constructor(): R|B.Inner| {
                 super<R|kotlin/Any|>()
             }
 
@@ -28,7 +28,7 @@ FILE: exposedTypeAlias.kt
 
     }
     public final class C : R|kotlin/Any| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|kotlin/Any|>()
         }
 

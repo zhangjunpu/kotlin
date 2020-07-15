@@ -1,6 +1,6 @@
 FILE: typeAliasWithNotNullBound.kt
     public final class Inv<E> : R|kotlin/Any| {
-        public constructor<E>(): R|Inv<E>| {
+        constructor<E>(): R|Inv<E>| {
             super<R|kotlin/Any|>()
         }
 

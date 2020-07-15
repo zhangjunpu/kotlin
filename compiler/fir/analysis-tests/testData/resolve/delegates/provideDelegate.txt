@@ -1,6 +1,6 @@
 FILE: provideDelegate.kt
     public final class Delegate<T> : R|kotlin/Any| {
-        public constructor<T>(value: R|T|): R|Delegate<T>| {
+        constructor<T>(value: R|T|): R|Delegate<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -18,7 +18,7 @@ FILE: provideDelegate.kt
 
     }
     public final class DelegateProvider<T> : R|kotlin/Any| {
-        public constructor<T>(value: R|T|): R|DelegateProvider<T>| {
+        constructor<T>(value: R|T|): R|DelegateProvider<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -34,7 +34,7 @@ FILE: provideDelegate.kt
         ^delegate R|/DelegateProvider.DelegateProvider|<R|T|>(R|<local>/value|)
     }
     public final class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 

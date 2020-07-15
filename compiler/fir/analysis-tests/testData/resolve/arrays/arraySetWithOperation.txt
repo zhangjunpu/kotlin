@@ -1,6 +1,6 @@
 FILE: arraySetWithOperation.kt
     public final class A<T> : R|kotlin/Any| {
-        public constructor<T>(): R|A<T>| {
+        constructor<T>(): R|A<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -13,7 +13,7 @@ FILE: arraySetWithOperation.kt
 
     }
     public final class B : R|kotlin/Any| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 
@@ -22,7 +22,7 @@ FILE: arraySetWithOperation.kt
 
     }
     public final class C : R|kotlin/Any| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|kotlin/Any|>()
         }
 
@@ -32,7 +32,7 @@ FILE: arraySetWithOperation.kt
 
     }
     public final class D : R|kotlin/Any| {
-        public constructor(): R|D| {
+        constructor(): R|D| {
             super<R|kotlin/Any|>()
         }
 

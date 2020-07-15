@@ -1,6 +1,6 @@
 FILE: delegateInference.kt
     public final class FreezableVar<T> : R|kotlin/Any| {
-        public constructor<T>(value: R|T|): R|FreezableVar<T>| {
+        constructor<T>(value: R|T|): R|FreezableVar<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -18,7 +18,7 @@ FILE: delegateInference.kt
 
     }
     public final class LocalFreezableVar<T> : R|kotlin/Any| {
-        public constructor<T>(value: R|T|): R|LocalFreezableVar<T>| {
+        constructor<T>(value: R|T|): R|LocalFreezableVar<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -36,7 +36,7 @@ FILE: delegateInference.kt
 
     }
     public final class Test : R|kotlin/Any| {
-        public constructor(): R|Test| {
+        constructor(): R|Test| {
             super<R|kotlin/Any|>()
         }
 

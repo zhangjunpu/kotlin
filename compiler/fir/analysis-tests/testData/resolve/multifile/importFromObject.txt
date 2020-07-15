@@ -1,6 +1,6 @@
 FILE: a.kt
     public final object A : R|kotlin/Any| {
-        private constructor(): R|a/A| {
+        constructor(): R|a/A| {
             super<R|kotlin/Any|>()
         }
 

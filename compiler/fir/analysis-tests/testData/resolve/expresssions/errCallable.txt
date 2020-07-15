@@ -1,11 +1,11 @@
 FILE: errCallable.kt
     public final class Your : R|kotlin/Any| {
-        public constructor(): R|Your| {
+        constructor(): R|Your| {
             super<R|kotlin/Any|>()
         }
 
         public final class Nested : R|kotlin/Any| {
-            public constructor(): R|Your.Nested| {
+            constructor(): R|Your.Nested| {
                 super<R|kotlin/Any|>()
             }
 
@@ -13,7 +13,7 @@ FILE: errCallable.kt
 
     }
     public final class My : R|kotlin/Any| {
-        public constructor(): R|My| {
+        constructor(): R|My| {
             super<R|kotlin/Any|>()
         }
 

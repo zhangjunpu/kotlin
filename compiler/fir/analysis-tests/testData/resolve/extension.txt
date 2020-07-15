@@ -5,7 +5,7 @@ FILE: extension.kt
         this@R|/bar|.R|/foo|()
     }
     public final class My : R|kotlin/Any| {
-        public constructor(): R|My| {
+        constructor(): R|My| {
             super<R|kotlin/Any|>()
         }
 

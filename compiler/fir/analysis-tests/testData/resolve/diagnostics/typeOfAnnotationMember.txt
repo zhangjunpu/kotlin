@@ -1,12 +1,12 @@
 FILE: typeOfAnnotationMember.kt
     public final class Foo : R|kotlin/Any| {
-        public constructor(): R|Foo| {
+        constructor(): R|Foo| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final enum class Enum : R|kotlin/Enum<Enum>| {
-        private constructor(): R|Enum| {
+        constructor(): R|Enum| {
             super<R|kotlin/Enum<Enum>|>()
         }
 
@@ -19,7 +19,7 @@ FILE: typeOfAnnotationMember.kt
 
     }
     public final annotation class Ann1 : R|kotlin/Annotation| {
-        public constructor(p1: R|kotlin/Array<kotlin/Int>|, p2: R|kotlin/Array<kotlin/Int?>|, p3: R|kotlin/Array<kotlin/IntArray>|, p4: R|kotlin/Array<Foo>|, p5: R|Foo|, vararg p6: R|kotlin/Array<out java/lang/Class<*>>|): R|Ann1| {
+        constructor(p1: R|kotlin/Array<kotlin/Int>|, p2: R|kotlin/Array<kotlin/Int?>|, p3: R|kotlin/Array<kotlin/IntArray>|, p4: R|kotlin/Array<Foo>|, p5: R|Foo|, vararg p6: R|kotlin/Array<out java/lang/Class<*>>|): R|Ann1| {
             super<R|kotlin/Any|>()
         }
 
@@ -43,7 +43,7 @@ FILE: typeOfAnnotationMember.kt
 
     }
     public final annotation class Ann2 : R|kotlin/Annotation| {
-        public constructor(p1: R|kotlin/Int?|, p2: R|kotlin/String?|, p3: R|kotlin/IntArray?|, p4: R|kotlin/Array<kotlin/Int>?|, p5: R|Ann1?|, p6: R|Enum?|): R|Ann2| {
+        constructor(p1: R|kotlin/Int?|, p2: R|kotlin/String?|, p3: R|kotlin/IntArray?|, p4: R|kotlin/Array<kotlin/Int>?|, p5: R|Ann1?|, p6: R|Enum?|): R|Ann2| {
             super<R|kotlin/Any|>()
         }
 

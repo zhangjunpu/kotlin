@@ -1,6 +1,6 @@
 FILE: invokeAmbiguity.kt
     public open class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
@@ -10,7 +10,7 @@ FILE: invokeAmbiguity.kt
 
     }
     public final class B : R|kotlin/Any| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 
@@ -20,7 +20,7 @@ FILE: invokeAmbiguity.kt
 
     }
     public open class C : R|kotlin/Any| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|kotlin/Any|>()
         }
 
@@ -30,7 +30,7 @@ FILE: invokeAmbiguity.kt
             ^ R|kotlin/TODO|()
         }
     public open class D : R|C| {
-        public constructor(): R|D| {
+        constructor(): R|D| {
             super<R|C|>()
         }
 

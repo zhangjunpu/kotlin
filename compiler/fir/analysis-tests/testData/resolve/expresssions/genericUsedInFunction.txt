@@ -1,6 +1,6 @@
 FILE: genericUsedInFunction.kt
     public final class Generic<T : R|kotlin/CharSequence?|> : R|kotlin/Any| {
-        public constructor<T : R|kotlin/CharSequence?|>(value: R|T|): R|Generic<T>| {
+        constructor<T : R|kotlin/CharSequence?|>(value: R|T|): R|Generic<T>| {
             super<R|kotlin/Any|>()
         }
 

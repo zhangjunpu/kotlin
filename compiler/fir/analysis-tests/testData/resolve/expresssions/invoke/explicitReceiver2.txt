@@ -1,6 +1,6 @@
 FILE: explicitReceiver2.kt
     public final class Bar : R|kotlin/Any| {
-        public constructor(): R|Bar| {
+        constructor(): R|Bar| {
             super<R|kotlin/Any|>()
         }
 
@@ -12,7 +12,7 @@ FILE: explicitReceiver2.kt
     public final fun x(): R|kotlin/Unit| {
     }
     public final class Foo : R|kotlin/Any| {
-        public constructor(): R|Foo| {
+        constructor(): R|Foo| {
             super<R|kotlin/Any|>()
         }
 

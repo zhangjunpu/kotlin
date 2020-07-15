@@ -18,7 +18,7 @@ FILE: qualifiedSupertypeExtendedByOtherSupertype.kt
 
     }
     public final class Test : R|IDerived<kotlin/String>|, R|IBase<kotlin/String>| {
-        public constructor(): R|Test| {
+        constructor(): R|Test| {
             super<R|kotlin/Any|>()
         }
 
@@ -32,7 +32,7 @@ FILE: qualifiedSupertypeExtendedByOtherSupertype.kt
 
     }
     public final class Test2 : R|IDerived<kotlin/String>|, R|AliasedIBase| {
-        public constructor(): R|Test2| {
+        constructor(): R|Test2| {
             super<R|kotlin/Any|>()
         }
 

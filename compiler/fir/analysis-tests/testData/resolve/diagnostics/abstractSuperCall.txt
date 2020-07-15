@@ -1,6 +1,6 @@
 FILE: abstractSuperCall.kt
     public open class C : R|kotlin/Any| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|kotlin/Any|>()
         }
 
@@ -12,7 +12,7 @@ FILE: abstractSuperCall.kt
 
     }
     public abstract class A : R|C| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|C|>()
         }
 
@@ -31,7 +31,7 @@ FILE: abstractSuperCall.kt
 
     }
     public final class B : R|A| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|A|>()
         }
 
@@ -47,7 +47,7 @@ FILE: abstractSuperCall.kt
 
     }
     public abstract class J : R|A| {
-        public constructor(): R|J| {
+        constructor(): R|J| {
             super<R|A|>()
         }
 

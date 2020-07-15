@@ -1,6 +1,6 @@
 FILE: test.kt
     public final class MyDecorator : R|Decorator<LookupElement>| {
-        public constructor(): R|MyDecorator| {
+        constructor(): R|MyDecorator| {
             super<R|Decorator<LookupElement>|>()
         }
 

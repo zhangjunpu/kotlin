@@ -1,13 +1,13 @@
 FILE: typeAliasConstructor.kt
     public final class A : R|kotlin/Any| {
-        public constructor(i: R|kotlin/Int|): R|A| {
+        constructor(i: R|kotlin/Int|): R|A| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final typealias AA = R|A|
     public final class B<T> : R|kotlin/Any| {
-        public constructor<T>(t: R|T|): R|B<T>| {
+        constructor<T>(t: R|T|): R|B<T>| {
             super<R|kotlin/Any|>()
         }
 

@@ -1,6 +1,6 @@
 FILE: genericConstructors.kt
     public final class A<T> : R|kotlin/Any| {
-        public constructor<T>(t: R|T|): R|A<T>| {
+        constructor<T>(t: R|T|): R|A<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -9,7 +9,7 @@ FILE: genericConstructors.kt
 
     }
     public abstract class B<E> : R|kotlin/Any| {
-        public constructor<E>(e: R|E|): R|B<E>| {
+        constructor<E>(e: R|E|): R|B<E>| {
             super<R|kotlin/Any|>()
         }
 
@@ -25,7 +25,7 @@ FILE: genericConstructors.kt
 
     }
     public final class C : R|B<kotlin/String>| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|B<kotlin/String>|>(String())
         }
 

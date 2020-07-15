@@ -6,7 +6,7 @@ FILE: lambdaReturningObject.kt
     public abstract interface IrTypeArgument : R|kotlin/Any| {
     }
     public final object IrStarProjectionImpl : R|IrTypeArgument| {
-        private constructor(): R|IrStarProjectionImpl| {
+        constructor(): R|IrStarProjectionImpl| {
             super<R|kotlin/Any|>()
         }
 

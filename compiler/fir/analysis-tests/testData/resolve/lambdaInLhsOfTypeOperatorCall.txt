@@ -14,7 +14,7 @@ FILE: lambdaInLhsOfTypeOperatorCall.kt
          as R|B<kotlin/Int, kotlin/Int>|)
     }
     public final class B<out K, V> : R|kotlin/Any| {
-        public constructor<out K, V>(k: R|K|, v: R|V|): R|B<K, V>| {
+        constructor<out K, V>(k: R|K|, v: R|V|): R|B<K, V>| {
             super<R|kotlin/Any|>()
         }
 

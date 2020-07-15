@@ -1,6 +1,6 @@
 FILE: sealedClass.kt
     public sealed class Foo : R|kotlin/Any| {
-        private constructor(value: R|kotlin/String|): R|Foo| {
+        constructor(value: R|kotlin/String|): R|Foo| {
             super<R|kotlin/Any|>()
         }
 
@@ -9,32 +9,32 @@ FILE: sealedClass.kt
 
     }
     public final class Bar : R|Foo| {
-        public constructor(): R|Bar| {
+        constructor(): R|Bar| {
             super<R|Foo|>(String(OK))
         }
 
     }
     public sealed class WithPrivateConstructor : R|kotlin/Any| {
-        private constructor(x: R|kotlin/Int|): R|WithPrivateConstructor| {
+        constructor(x: R|kotlin/Int|): R|WithPrivateConstructor| {
             super<R|kotlin/Any|>()
         }
 
         public final val x: R|kotlin/Int| = R|<local>/x|
             public get(): R|kotlin/Int|
 
-        private constructor(): R|WithPrivateConstructor| {
+        constructor(): R|WithPrivateConstructor| {
             this<R|WithPrivateConstructor|>(Int(42))
         }
 
     }
     public final object First : R|WithPrivateConstructor| {
-        private constructor(): R|First| {
+        constructor(): R|First| {
             super<R|WithPrivateConstructor|>()
         }
 
     }
     public final object Second : R|WithPrivateConstructor| {
-        private constructor(): R|Second| {
+        constructor(): R|Second| {
             super<R|WithPrivateConstructor|>(Int(0))
         }
 

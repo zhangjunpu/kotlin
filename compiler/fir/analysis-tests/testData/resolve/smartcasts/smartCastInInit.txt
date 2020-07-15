@@ -9,7 +9,7 @@ FILE: smartCastInInit.kt
         ^s R|kotlin/TODO|()
     }
     public final class Main : R|kotlin/Any| {
-        public constructor(): R|Main| {
+        constructor(): R|Main| {
             super<R|kotlin/Any|>()
         }
 

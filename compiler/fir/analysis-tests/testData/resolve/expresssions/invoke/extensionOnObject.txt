@@ -1,12 +1,12 @@
 FILE: extensionOnObject.kt
     public final object X : R|kotlin/Any| {
-        private constructor(): R|X| {
+        constructor(): R|X| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class Y : R|kotlin/Any| {
-        public constructor(): R|Y| {
+        constructor(): R|Y| {
             super<R|kotlin/Any|>()
         }
 

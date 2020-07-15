@@ -1,6 +1,6 @@
 FILE: invoke.kt
     public final class My : R|kotlin/Any| {
-        public constructor(x: R|kotlin/Int|): R|My| {
+        constructor(x: R|kotlin/Int|): R|My| {
             super<R|kotlin/Any|>()
         }
 

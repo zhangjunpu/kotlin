@@ -1,16 +1,16 @@
 FILE: classifierAccessFromCompanion.kt
     public final class Factory : R|kotlin/Any| {
-        public constructor(): R|Factory| {
+        constructor(): R|Factory| {
             super<R|kotlin/Any|>()
         }
 
         public sealed class Function : R|kotlin/Any| {
-            private constructor(): R|Factory.Function| {
+            constructor(): R|Factory.Function| {
                 super<R|kotlin/Any|>()
             }
 
             public final object Default : R|kotlin/Any| {
-                private constructor(): R|Factory.Function.Default| {
+                constructor(): R|Factory.Function.Default| {
                     super<R|kotlin/Any|>()
                 }
 
@@ -19,7 +19,7 @@ FILE: classifierAccessFromCompanion.kt
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|Factory.Companion| {
+            constructor(): R|Factory.Companion| {
                 super<R|kotlin/Any|>()
             }
 

@@ -12,7 +12,7 @@ FILE: main.kt
         lval int: <ERROR TYPE REF: Unresolved name: vMParameters> = R|<local>/x|.<Unresolved name: vMParameters>#
     }
     public final class Foo : R|kotlin/Any| {
-        public constructor(): R|Foo| {
+        constructor(): R|Foo| {
             super<R|kotlin/Any|>()
         }
 

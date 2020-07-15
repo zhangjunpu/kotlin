@@ -7,7 +7,7 @@ FILE: simpleClass.kt
 
     }
     public final class SomeClass : R|SomeInterface| {
-        public constructor(): R|SomeClass| {
+        constructor(): R|SomeClass| {
             super<R|kotlin/Any|>()
         }
 

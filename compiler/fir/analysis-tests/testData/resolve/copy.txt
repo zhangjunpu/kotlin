@@ -1,6 +1,6 @@
 FILE: copy.kt
     public final data class Some : R|kotlin/Any| {
-        public constructor(x: R|kotlin/Int|, y: R|kotlin/String|): R|Some| {
+        constructor(x: R|kotlin/Int|, y: R|kotlin/String|): R|Some| {
             super<R|kotlin/Any|>()
         }
 

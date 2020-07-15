@@ -1,6 +1,6 @@
 FILE: B.kt
     public final class A : R|kotlin/Any| {
-        public constructor(): R|b/A| {
+        constructor(): R|b/A| {
             super<R|kotlin/Any|>()
         }
 
@@ -8,7 +8,7 @@ FILE: B.kt
     public final typealias TA = R|b/A|
 FILE: A.kt
     public final class MyClass : R|b/TA| {
-        public constructor(): R|a/MyClass| {
+        constructor(): R|a/MyClass| {
             super<R|b/TA|>()
         }
 

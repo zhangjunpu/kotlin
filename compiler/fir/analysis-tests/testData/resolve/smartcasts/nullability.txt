@@ -20,7 +20,7 @@ FILE: nullability.kt
 
     }
     public final class QImpl : R|Q| {
-        public constructor(data: R|MyData?|): R|QImpl| {
+        constructor(data: R|MyData?|): R|QImpl| {
             super<R|kotlin/Any|>()
         }
 
@@ -33,7 +33,7 @@ FILE: nullability.kt
 
     }
     public final class QImplMutable : R|Q| {
-        public constructor(data: R|MyData?|): R|QImplMutable| {
+        constructor(data: R|MyData?|): R|QImplMutable| {
             super<R|kotlin/Any|>()
         }
 
@@ -47,7 +47,7 @@ FILE: nullability.kt
 
     }
     public final class QImplWithCustomGetter : R|Q| {
-        public constructor(): R|QImplWithCustomGetter| {
+        constructor(): R|QImplWithCustomGetter| {
             super<R|kotlin/Any|>()
         }
 

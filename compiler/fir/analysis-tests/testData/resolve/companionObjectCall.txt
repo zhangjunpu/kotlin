@@ -1,6 +1,6 @@
 FILE: companionObjectCall.kt
     public final class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
@@ -16,7 +16,7 @@ FILE: companionObjectCall.kt
         Q|Case1|.R|/Case1.Companion.invoke|(a = R|/A.A|())
     }
     public final class Case1 : R|kotlin/Any| {
-        private constructor(a: R|kotlin/String|): R|Case1| {
+        constructor(a: R|kotlin/String|): R|Case1| {
             super<R|kotlin/Any|>()
         }
 
@@ -24,7 +24,7 @@ FILE: companionObjectCall.kt
             public get(): R|kotlin/String|
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|Case1.Companion| {
+            constructor(): R|Case1.Companion| {
                 super<R|kotlin/Any|>()
             }
 
@@ -40,12 +40,12 @@ FILE: companionObjectCall.kt
         Q|Case2|.R|/Case2.Companion.invoke|(a = R|<local>/a|)
     }
     public final class Case2 : R|kotlin/Any| {
-        public constructor(): R|Case2| {
+        constructor(): R|Case2| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|Case2.Companion| {
+            constructor(): R|Case2.Companion| {
                 super<R|kotlin/Any|>()
             }
 
@@ -61,12 +61,12 @@ FILE: companionObjectCall.kt
         Q|Case3.Companion|.R|/Case3.Companion.invoke|(parameterA = R|<local>/a|)
     }
     public final class Case3 : R|kotlin/Any| {
-        public constructor(): R|Case3| {
+        constructor(): R|Case3| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|Case3.Companion| {
+            constructor(): R|Case3.Companion| {
                 super<R|kotlin/Any|>()
             }
 

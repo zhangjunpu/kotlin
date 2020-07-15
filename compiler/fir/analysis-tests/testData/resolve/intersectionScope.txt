@@ -4,7 +4,7 @@ FILE: intersectionScope.kt
 
     }
     public abstract class B : R|A| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 

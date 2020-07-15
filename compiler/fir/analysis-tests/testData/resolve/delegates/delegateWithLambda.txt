@@ -1,6 +1,6 @@
 FILE: delegateWithLambda.kt
     public final class LazyDelegate<T> : R|kotlin/Any| {
-        public constructor<T>(value: R|T|): R|LazyDelegate<T>| {
+        constructor<T>(value: R|T|): R|LazyDelegate<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -19,7 +19,7 @@ FILE: delegateWithLambda.kt
         ^getAny Null(null)
     }
     public final class Test : R|kotlin/Any| {
-        public constructor(): R|Test| {
+        constructor(): R|Test| {
             super<R|kotlin/Any|>()
         }
 

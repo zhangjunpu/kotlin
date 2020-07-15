@@ -1,11 +1,11 @@
 FILE: innerQualifier.kt
     public final class Outer : R|kotlin/Any| {
-        public constructor(): R|Outer| {
+        constructor(): R|Outer| {
             super<R|kotlin/Any|>()
         }
 
         public final inner class Inner : R|kotlin/Any| {
-            public constructor(): R|Outer.Inner| {
+            constructor(): R|Outer.Inner| {
                 super<R|kotlin/Any|>()
             }
 

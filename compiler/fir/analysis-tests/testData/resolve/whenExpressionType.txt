@@ -1,6 +1,6 @@
 FILE: whenExpressionType.kt
     public final enum class A : R|kotlin/Enum<A>| {
-        private constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Enum<A>|>()
         }
 
@@ -14,13 +14,13 @@ FILE: whenExpressionType.kt
 
     }
     public final class B : R|kotlin/Any| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class C : R|kotlin/Any| {
-        public constructor(b: R|B|): R|C| {
+        constructor(b: R|B|): R|C| {
             super<R|kotlin/Any|>()
         }
 

@@ -53,7 +53,7 @@ FILE: integerLiteralTypes.kt
         ))
     }
     public final annotation class Ann : R|kotlin/Annotation| {
-        public constructor(x: R|kotlin/Byte|): R|Ann| {
+        constructor(x: R|kotlin/Byte|): R|Ann| {
             super<R|kotlin/Any|>()
         }
 

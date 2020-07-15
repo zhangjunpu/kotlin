@@ -1,6 +1,6 @@
 FILE: superMember.kt
     public open class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
@@ -9,7 +9,7 @@ FILE: superMember.kt
 
     }
     public final class B : R|A| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|A|>()
         }
 

@@ -1,6 +1,6 @@
 FILE: main.kt
     public final class B : R|A| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|A|>()
         }
 

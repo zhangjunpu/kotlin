@@ -1,6 +1,6 @@
 FILE: constantValues.kt
     public abstract class ConstantValue<out T> : R|kotlin/Any| {
-        public constructor<out T>(value: R|T|): R|ConstantValue<T>| {
+        constructor<out T>(value: R|T|): R|ConstantValue<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -9,7 +9,7 @@ FILE: constantValues.kt
 
     }
     public final data class ClassLiteralValue : R|kotlin/Any| {
-        public constructor(classId: R|ClassId|, arrayNestedness: R|kotlin/Int|): R|ClassLiteralValue| {
+        constructor(classId: R|ClassId|, arrayNestedness: R|kotlin/Int|): R|ClassLiteralValue| {
             super<R|kotlin/Any|>()
         }
 
@@ -27,29 +27,29 @@ FILE: constantValues.kt
 
     }
     public final class ClassId : R|kotlin/Any| {
-        public constructor(): R|ClassId| {
+        constructor(): R|ClassId| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class KotlinType : R|kotlin/Any| {
-        public constructor(): R|KotlinType| {
+        constructor(): R|KotlinType| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class KClassValue : R|ConstantValue<KClassValue.Value>| {
-        public constructor(value: R|KClassValue.Value|): R|KClassValue| {
+        constructor(value: R|KClassValue.Value|): R|KClassValue| {
             super<R|ConstantValue<KClassValue.Value>|>(R|<local>/value|)
         }
 
         public sealed class Value : R|kotlin/Any| {
-            private constructor(): R|KClassValue.Value| {
+            constructor(): R|KClassValue.Value| {
                 super<R|kotlin/Any|>()
             }
 
             public final data class NormalClass : R|KClassValue.Value| {
-                public constructor(value: R|ClassLiteralValue|): R|KClassValue.Value.NormalClass| {
+                constructor(value: R|ClassLiteralValue|): R|KClassValue.Value.NormalClass| {
                     super<R|KClassValue.Value|>()
                 }
 
@@ -69,7 +69,7 @@ FILE: constantValues.kt
             }
 
             public final data class LocalClass : R|KClassValue.Value| {
-                public constructor(type: R|KotlinType|): R|KClassValue.Value.LocalClass| {
+                constructor(type: R|KotlinType|): R|KClassValue.Value.LocalClass| {
                     super<R|KClassValue.Value|>()
                 }
 

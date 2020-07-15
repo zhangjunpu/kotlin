@@ -1,16 +1,16 @@
 FILE: exhaustiveness_sealedClass.kt
     public sealed class Base : R|kotlin/Any| {
-        private constructor(): R|Base| {
+        constructor(): R|Base| {
             super<R|kotlin/Any|>()
         }
 
         public final class A : R|Base| {
-            public constructor(): R|Base.A| {
+            constructor(): R|Base.A| {
                 super<R|Base|>()
             }
 
             public final class B : R|Base| {
-                public constructor(): R|Base.A.B| {
+                constructor(): R|Base.A.B| {
                     super<R|Base|>()
                 }
 
@@ -20,7 +20,7 @@ FILE: exhaustiveness_sealedClass.kt
 
     }
     public final class C : R|Base| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|Base|>()
         }
 

@@ -1,12 +1,12 @@
 FILE: annotations.kt
     @R|kotlin/annotation/Target|(Q|kotlin/annotation/AnnotationTarget|.R|kotlin/annotation/AnnotationTarget.FILE|, Q|kotlin/annotation/AnnotationTarget|.R|kotlin/annotation/AnnotationTarget.FUNCTION|, Q|kotlin/annotation/AnnotationTarget|.R|kotlin/annotation/AnnotationTarget.TYPE|, Q|kotlin/annotation/AnnotationTarget|.R|kotlin/annotation/AnnotationTarget.PROPERTY_GETTER|) public final annotation class Simple : R|kotlin/Annotation| {
-        public constructor(): R|annotations/Simple| {
+        constructor(): R|annotations/Simple| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final annotation class WithInt : R|kotlin/Annotation| {
-        public constructor(value: R|kotlin/Int|): R|annotations/WithInt| {
+        constructor(value: R|kotlin/Int|): R|annotations/WithInt| {
             super<R|kotlin/Any|>()
         }
 
@@ -15,7 +15,7 @@ FILE: annotations.kt
 
     }
     public final annotation class WithString : R|kotlin/Annotation| {
-        public constructor(s: R|kotlin/String|): R|annotations/WithString| {
+        constructor(s: R|kotlin/String|): R|annotations/WithString| {
             super<R|kotlin/Any|>()
         }
 
@@ -24,7 +24,7 @@ FILE: annotations.kt
 
     }
     public final annotation class Complex : R|kotlin/Annotation| {
-        public constructor(wi: R|annotations/WithInt|, ws: R|annotations/WithString|): R|annotations/Complex| {
+        constructor(wi: R|annotations/WithInt|, ws: R|annotations/WithString|): R|annotations/Complex| {
             super<R|kotlin/Any|>()
         }
 
@@ -36,7 +36,7 @@ FILE: annotations.kt
 
     }
     public final annotation class VeryComplex : R|kotlin/Annotation| {
-        public constructor(f: R|kotlin/Float|, d: R|kotlin/Double|, b: R|kotlin/Boolean|, l: R|kotlin/Long|, n: R|kotlin/Int?|): R|annotations/VeryComplex| {
+        constructor(f: R|kotlin/Float|, d: R|kotlin/Double|, b: R|kotlin/Boolean|, l: R|kotlin/Long|, n: R|kotlin/Int?|): R|annotations/VeryComplex| {
             super<R|kotlin/Any|>()
         }
 
@@ -59,7 +59,7 @@ FILE: annotations.kt
 FILE: main.kt
     @FILE:R|annotations/Simple|()
     @R|annotations/WithInt|(Int(42)) public abstract class First : R|kotlin/Any| {
-        public constructor(): R|test/First| {
+        constructor(): R|test/First| {
             super<R|kotlin/Any|>()
         }
 
@@ -70,7 +70,7 @@ FILE: main.kt
 
     }
     @R|annotations/WithString|(String(xyz)) public final class Second : @R|annotations/WithInt|(IntegerLiteral(0)) R|test/First| {
-        public constructor(y: R|kotlin/Char|): R|test/Second| {
+        constructor(y: R|kotlin/Char|): R|test/Second| {
             super<@R|annotations/WithInt|(IntegerLiteral(0)) R|test/First|>()
         }
 
@@ -85,7 +85,7 @@ FILE: main.kt
                 ^ String()
             }
 
-        @R|annotations/WithString|(String(constructor)) public constructor(): R|test/Second| {
+        @R|annotations/WithString|(String(constructor)) constructor(): R|test/Second| {
             this<R|test/Second|>(Char(10))
         }
 

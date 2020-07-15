@@ -6,13 +6,13 @@ FILE: protobufExt.kt
 
     }
     public final class MyMessage : R|Message<MyMessage>| {
-        public constructor(): R|MyMessage| {
+        constructor(): R|MyMessage| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class MyExt : R|Ext<MyMessage, kotlin/String>| {
-        public constructor(): R|MyExt| {
+        constructor(): R|MyExt| {
             super<R|kotlin/Any|>()
         }
 

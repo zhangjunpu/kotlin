@@ -2,7 +2,7 @@ FILE: extension.kt
     public final fun x(): R|kotlin/Unit| {
     }
     public final class Foo : R|kotlin/Any| {
-        public constructor(): R|Foo| {
+        constructor(): R|Foo| {
             super<R|kotlin/Any|>()
         }
 

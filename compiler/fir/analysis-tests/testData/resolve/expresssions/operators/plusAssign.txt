@@ -2,7 +2,7 @@ FILE: plusAssign.kt
     public final operator fun R|Foo|.plusAssign(x: R|kotlin/Any|): R|kotlin/Unit| {
     }
     public final class Foo : R|kotlin/Any| {
-        public constructor(): R|Foo| {
+        constructor(): R|Foo| {
             super<R|kotlin/Any|>()
         }
 

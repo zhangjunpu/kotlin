@@ -1,6 +1,6 @@
 FILE: test.kt
     public final class AnotherClass : R|kotlin/Any| {
-        public constructor(bar: R|kotlin/CharSequence?|, foo: R|kotlin/Int|): R|AnotherClass| {
+        constructor(bar: R|kotlin/CharSequence?|, foo: R|kotlin/Int|): R|AnotherClass| {
             super<R|kotlin/Any|>()
         }
 

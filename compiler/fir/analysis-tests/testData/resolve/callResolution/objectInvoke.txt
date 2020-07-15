@@ -1,6 +1,6 @@
 FILE: objectInvoke.kt
     public final object Bar : R|kotlin/Any| {
-        private constructor(): R|Bar| {
+        constructor(): R|Bar| {
             super<R|kotlin/Any|>()
         }
 

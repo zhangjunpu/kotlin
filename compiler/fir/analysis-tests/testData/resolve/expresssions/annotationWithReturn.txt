@@ -3,7 +3,7 @@ FILE: annotationWithReturn.kt
     public final const val x: R|kotlin/Int| = Int(42)
         public get(): R|kotlin/Int|
     public final annotation class Some : R|kotlin/Annotation| {
-        public constructor(value: R|kotlin/Int|): R|Some| {
+        constructor(value: R|kotlin/Int|): R|Some| {
             super<R|kotlin/Any|>()
         }
 

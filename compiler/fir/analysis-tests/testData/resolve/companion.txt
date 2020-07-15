@@ -1,16 +1,16 @@
 FILE: companion.kt
     public abstract class Some : R|kotlin/Any| {
-        public constructor(): R|test/Some| {
+        constructor(): R|test/Some| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|test/Some.Companion| {
+            constructor(): R|test/Some.Companion| {
                 super<R|kotlin/Any|>()
             }
 
             public final class InCompanion : R|kotlin/Any| {
-                public constructor(): R|test/Some.Companion.InCompanion| {
+                constructor(): R|test/Some.Companion.InCompanion| {
                     super<R|kotlin/Any|>()
                 }
 
@@ -23,17 +23,17 @@ FILE: companion.kt
 
     }
     public abstract class Another : R|kotlin/Any| {
-        public constructor(): R|test/Another| {
+        constructor(): R|test/Another| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object NamedCompanion : R|kotlin/Any| {
-            private constructor(): R|test/Another.NamedCompanion| {
+            constructor(): R|test/Another.NamedCompanion| {
                 super<R|kotlin/Any|>()
             }
 
             public final class InCompanion : R|kotlin/Any| {
-                public constructor(): R|test/Another.NamedCompanion.InCompanion| {
+                constructor(): R|test/Another.NamedCompanion.InCompanion| {
                     super<R|kotlin/Any|>()
                 }
 

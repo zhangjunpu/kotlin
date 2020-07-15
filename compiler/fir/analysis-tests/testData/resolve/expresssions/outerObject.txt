@@ -1,6 +1,6 @@
 FILE: outerObject.kt
     public final object Outer : R|kotlin/Any| {
-        private constructor(): R|Outer| {
+        constructor(): R|Outer| {
             super<R|kotlin/Any|>()
         }
 
@@ -11,7 +11,7 @@ FILE: outerObject.kt
         }
 
         public final class Nested : R|kotlin/Any| {
-            public constructor(): R|Outer.Nested| {
+            constructor(): R|Outer.Nested| {
                 super<R|kotlin/Any|>()
             }
 

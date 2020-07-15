@@ -4,7 +4,7 @@ FILE: generics.kt
 
     }
     public abstract class Base : R|kotlin/Any| {
-        public constructor(): R|Base| {
+        constructor(): R|Base| {
             super<R|kotlin/Any|>()
         }
 
@@ -13,7 +13,7 @@ FILE: generics.kt
 
     }
     public final class C : R|Base|, R|I| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|Base|>()
         }
 

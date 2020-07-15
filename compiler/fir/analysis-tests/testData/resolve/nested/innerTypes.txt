@@ -1,11 +1,11 @@
 FILE: innerTypes.kt
     public final class Outer<T> : R|kotlin/Any| {
-        public constructor<T>(): R|Outer<T>| {
+        constructor<T>(): R|Outer<T>| {
             super<R|kotlin/Any|>()
         }
 
         public final inner class Inner<K, T> : R|kotlin/Any| {
-            public constructor<K>(): R|Outer.Inner<K, T>| {
+            constructor<K>(): R|Outer.Inner<K, T>| {
                 super<R|kotlin/Any|>()
             }
 
@@ -13,7 +13,7 @@ FILE: innerTypes.kt
 
     }
     public final class Boxed<Q> : R|kotlin/Any| {
-        public constructor<Q>(): R|Boxed<Q>| {
+        constructor<Q>(): R|Boxed<Q>| {
             super<R|kotlin/Any|>()
         }
 

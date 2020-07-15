@@ -5,7 +5,7 @@ FILE: genericFunctions.kt
         ^safeAs (this@R|/safeAs| as? R|T|)
     }
     public abstract class Summator : R|kotlin/Any| {
-        public constructor(): R|Summator| {
+        constructor(): R|Summator| {
             super<R|kotlin/Any|>()
         }
 

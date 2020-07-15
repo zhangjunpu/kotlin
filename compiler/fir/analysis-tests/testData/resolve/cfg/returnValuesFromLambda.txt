@@ -2,13 +2,13 @@ FILE: returnValuesFromLambda.kt
     public abstract interface A : R|kotlin/Any| {
     }
     public final class B : R|A| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class C : R|A| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|kotlin/Any|>()
         }
 

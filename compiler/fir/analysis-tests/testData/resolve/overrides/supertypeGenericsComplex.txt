@@ -1,6 +1,6 @@
 FILE: supertypeGenericsComplex.kt
     public final class Out<out T> : R|kotlin/Any| {
-        public constructor<out T>(): R|Out<T>| {
+        constructor<out T>(): R|Out<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -8,7 +8,7 @@ FILE: supertypeGenericsComplex.kt
     public abstract interface X : R|Out<kotlin/String>| {
     }
     public abstract class Base<E> : R|kotlin/Any| {
-        public constructor<E>(): R|Base<E>| {
+        constructor<E>(): R|Base<E>| {
             super<R|kotlin/Any|>()
         }
 
@@ -17,7 +17,7 @@ FILE: supertypeGenericsComplex.kt
 
     }
     public final class C : R|Base<kotlin/CharSequence>| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|Base<kotlin/CharSequence>|>()
         }
 

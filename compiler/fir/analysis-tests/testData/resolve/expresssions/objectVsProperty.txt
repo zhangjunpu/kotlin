@@ -1,6 +1,6 @@
 FILE: objectVsProperty.kt
     public final object A : R|kotlin/Any| {
-        private constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 

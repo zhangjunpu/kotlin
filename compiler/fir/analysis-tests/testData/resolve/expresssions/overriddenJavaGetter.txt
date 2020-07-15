@@ -1,6 +1,6 @@
 FILE: Derived.kt
     public final class Derived : R|Base| {
-        public constructor(): R|Derived| {
+        constructor(): R|Derived| {
             super<R|Base|>()
         }
 

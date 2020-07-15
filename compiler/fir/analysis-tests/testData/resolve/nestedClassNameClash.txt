@@ -6,13 +6,13 @@ FILE: nestedClassNameClash.kt
         ^materialize Null(null)!!
     }
     public final class Result : R|kotlin/Any| {
-        public constructor(): R|Result| {
+        constructor(): R|Result| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class Foo : R|kotlin/Any| {
-        public constructor(): R|Foo| {
+        constructor(): R|Foo| {
             super<R|kotlin/Any|>()
         }
 
@@ -55,7 +55,7 @@ FILE: nestedClassNameClash.kt
         }
 
         public final class Result : R|kotlin/Any| {
-            public constructor(): R|Foo.Result| {
+            constructor(): R|Foo.Result| {
                 super<R|kotlin/Any|>()
             }
 

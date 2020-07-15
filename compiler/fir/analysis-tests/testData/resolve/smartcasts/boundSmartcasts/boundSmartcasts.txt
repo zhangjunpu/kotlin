@@ -59,7 +59,7 @@ FILE: boundSmartcasts.kt
 
     }
     public final class D : R|kotlin/Any| {
-        public constructor(any: R|kotlin/Any?|): R|D| {
+        constructor(any: R|kotlin/Any?|): R|D| {
             super<R|kotlin/Any|>()
         }
 

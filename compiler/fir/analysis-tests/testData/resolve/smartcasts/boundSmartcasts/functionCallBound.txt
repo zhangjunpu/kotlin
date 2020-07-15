@@ -1,12 +1,12 @@
 FILE: functionCallBound.kt
     public open class Base : R|kotlin/Any| {
-        public constructor(): R|Base| {
+        constructor(): R|Base| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class Sub : R|Base| {
-        public constructor(data: R|Base|): R|Sub| {
+        constructor(data: R|Base|): R|Sub| {
             super<R|Base|>()
         }
 

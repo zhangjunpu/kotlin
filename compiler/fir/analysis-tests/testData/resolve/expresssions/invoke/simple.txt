@@ -1,6 +1,6 @@
 FILE: simple.kt
     public final class Simple : R|kotlin/Any| {
-        public constructor(): R|Simple| {
+        constructor(): R|Simple| {
             super<R|kotlin/Any|>()
         }
 

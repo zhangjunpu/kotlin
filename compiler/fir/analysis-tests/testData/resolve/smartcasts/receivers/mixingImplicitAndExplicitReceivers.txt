@@ -2,7 +2,7 @@ FILE: mixingImplicitAndExplicitReceivers.kt
     public final fun takeString(s: R|kotlin/String|): R|kotlin/Unit| {
     }
     public final class Wrapper : R|kotlin/Any| {
-        public constructor(s: R|kotlin/String?|): R|Wrapper| {
+        constructor(s: R|kotlin/String?|): R|Wrapper| {
             super<R|kotlin/Any|>()
         }
 

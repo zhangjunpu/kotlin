@@ -1,6 +1,6 @@
 FILE: B.kt
     public abstract class MyClass : R|kotlin/Any| {
-        public constructor(): R|b/MyClass| {
+        constructor(): R|b/MyClass| {
             super<R|kotlin/Any|>()
         }
 
@@ -13,7 +13,7 @@ FILE: B.kt
     }
 FILE: A.kt
     public final class YourClass : R|b/MyClass| {
-        public constructor(): R|a/YourClass| {
+        constructor(): R|a/YourClass| {
             super<R|b/MyClass|>()
         }
 

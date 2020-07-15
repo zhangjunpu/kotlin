@@ -1,25 +1,25 @@
 FILE: repeatedModifier.kt
     public open class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
     }
     internal final object B : R|kotlin/Any| {
-        private constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final enum class C : R|kotlin/Enum<C>| {
-        private constructor(): R|C| {
+        constructor(): R|C| {
             super<R|kotlin/Enum<C>|>()
         }
 
         public final static enum entry VALUE1: R|C|
         public final static enum entry VALUE2: R|C|
         protected final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|C.Companion| {
+            constructor(): R|C.Companion| {
                 super<R|kotlin/Any|>()
             }
 
@@ -40,7 +40,7 @@ FILE: repeatedModifier.kt
 
     }
     public open class E : R|kotlin/Any| {
-        public constructor(int: R|kotlin/Int| = Int(5)): R|E| {
+        constructor(int: R|kotlin/Int| = Int(5)): R|E| {
             super<R|kotlin/Any|>()
         }
 

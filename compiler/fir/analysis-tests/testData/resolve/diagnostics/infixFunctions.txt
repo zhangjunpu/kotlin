@@ -8,7 +8,7 @@ FILE: infixFunctions.kt
     public final infix fun baz(x: R|kotlin/Int|, y: R|kotlin/Int|): R|kotlin/Unit| {
     }
     public final class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 
@@ -17,7 +17,7 @@ FILE: infixFunctions.kt
     public final val x: R|kotlin/Int| = Int(1)
         public get(): R|kotlin/Int|
     public final class C : R|kotlin/Any| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|kotlin/Any|>()
         }
 

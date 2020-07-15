@@ -1,6 +1,6 @@
 FILE: genericPropertyAccess.kt
     public abstract class Base<T> : R|kotlin/Any| {
-        public constructor<T>(x: R|T|): R|Base<T>| {
+        constructor<T>(x: R|T|): R|Base<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -11,7 +11,7 @@ FILE: genericPropertyAccess.kt
 
     }
     public final class Derived<T> : R|Base<T>| {
-        public constructor<T>(x: R|T|): R|Derived<T>| {
+        constructor<T>(x: R|T|): R|Derived<T>| {
             super<R|Base<T>|>(R|<local>/x|)
         }
 

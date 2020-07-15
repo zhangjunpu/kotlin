@@ -9,7 +9,7 @@ FILE: superNotAvailable.kt
         super<R|kotlin/Nothing|>.<Unresolved name: foo>#()
     }
     public final class A : R|kotlin/Any| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|kotlin/Any|>()
         }
 

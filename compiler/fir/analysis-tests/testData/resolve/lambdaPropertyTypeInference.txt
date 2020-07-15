@@ -38,7 +38,7 @@ FILE: KotlinClass.kt
         )
     }
     public final class Case1 : R|kotlin/Any| {
-        public constructor(javaClass: R|JavaClass?|): R|Case1| {
+        constructor(javaClass: R|JavaClass?|): R|Case1| {
             super<R|kotlin/Any|>()
         }
 
@@ -61,12 +61,12 @@ FILE: KotlinClass.kt
 
     }
     public final class BooCase1 : R|kotlin/Any| {
-        public constructor(): R|BooCase1| {
+        constructor(): R|BooCase1| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|BooCase1.Companion| {
+            constructor(): R|BooCase1.Companion| {
                 super<R|kotlin/Any|>()
             }
 
@@ -80,7 +80,7 @@ FILE: KotlinClass.kt
 
     }
     public final class KotlinClass : R|kotlin/Comparable<KotlinClass>| {
-        public constructor(name: R|kotlin/String|): R|KotlinClass| {
+        constructor(name: R|kotlin/String|): R|KotlinClass| {
             super<R|kotlin/Any|>()
         }
 
@@ -131,7 +131,7 @@ FILE: KotlinClass.kt
         )
     }
     public final class Case2 : R|kotlin/Any| {
-        public constructor(kotlinClass: R|KotlinClass?|): R|Case2| {
+        constructor(kotlinClass: R|KotlinClass?|): R|Case2| {
             super<R|kotlin/Any|>()
         }
 
@@ -154,12 +154,12 @@ FILE: KotlinClass.kt
 
     }
     public final class BooCase2 : R|kotlin/Any| {
-        public constructor(): R|BooCase2| {
+        constructor(): R|BooCase2| {
             super<R|kotlin/Any|>()
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|BooCase2.Companion| {
+            constructor(): R|BooCase2.Companion| {
                 super<R|kotlin/Any|>()
             }
 
@@ -177,7 +177,7 @@ FILE: CHECK_TYPE.kt
         ^checkSubtype R|<local>/t|
     }
     public final class Inv<T> : R|kotlin/Any| {
-        public constructor<T>(): R|tests/_checkType/Inv<T>| {
+        constructor<T>(): R|tests/_checkType/Inv<T>| {
             super<R|kotlin/Any|>()
         }
 

@@ -6,7 +6,7 @@ FILE: main.kt
     public abstract interface KI12 : R|KI1|, R|KI2| {
     }
     public open class KBase : R|kotlin/Any| {
-        public constructor(): R|KBase| {
+        constructor(): R|KBase| {
             super<R|kotlin/Any|>()
         }
 
@@ -15,7 +15,7 @@ FILE: main.kt
 
     }
     public final class KDerived : R|KBase| {
-        public constructor(): R|KDerived| {
+        constructor(): R|KDerived| {
             super<R|KBase|>()
         }
 

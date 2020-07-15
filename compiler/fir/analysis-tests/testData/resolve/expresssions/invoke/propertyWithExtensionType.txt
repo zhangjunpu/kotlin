@@ -1,6 +1,6 @@
 FILE: propertyWithExtensionType.kt
     public final class A : R|kotlin/Any| {
-        public constructor(x: R|kotlin/String.() -> kotlin/Unit|, y: R|kotlin/String.() -> kotlin/Int|): R|A| {
+        constructor(x: R|kotlin/String.() -> kotlin/Unit|, y: R|kotlin/String.() -> kotlin/Int|): R|A| {
             super<R|kotlin/Any|>()
         }
 

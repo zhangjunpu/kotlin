@@ -10,7 +10,7 @@ FILE: invokeOfLambdaWithReceiver.kt
         R|<local>/block|.R|FakeOverride<kotlin/Function1.invoke: R|kotlin/Int|>|(this@R|/otherTest|)
     }
     public final class C : R|kotlin/Any| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|kotlin/Any|>()
         }
 

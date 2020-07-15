@@ -2,7 +2,7 @@ FILE: receiverConsistency.kt
     public final fun foo(): R|kotlin/Unit| {
     }
     public final class C : R|kotlin/Any| {
-        public constructor(): R|C| {
+        constructor(): R|C| {
             super<R|kotlin/Any|>()
         }
 
@@ -13,7 +13,7 @@ FILE: receiverConsistency.kt
         }
 
         public final class Nested : R|kotlin/Any| {
-            public constructor(): R|C.Nested| {
+            constructor(): R|C.Nested| {
                 super<R|kotlin/Any|>()
             }
 

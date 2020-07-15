@@ -1,6 +1,6 @@
 FILE: varargInPrimaryConstructor.kt
     public final class Foo : R|kotlin/Any| {
-        public constructor(vararg strings: R|kotlin/Array<out kotlin/String>|): R|Foo| {
+        constructor(vararg strings: R|kotlin/Array<out kotlin/String>|): R|Foo| {
             super<R|kotlin/Any|>()
         }
 

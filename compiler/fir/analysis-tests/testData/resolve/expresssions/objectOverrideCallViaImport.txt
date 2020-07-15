@@ -5,7 +5,7 @@ FILE: objectOverrideCallViaImport.kt
 
     }
     public final object Derived : R|Base| {
-        private constructor(): R|Derived| {
+        constructor(): R|Derived| {
             super<R|kotlin/Any|>()
         }
 

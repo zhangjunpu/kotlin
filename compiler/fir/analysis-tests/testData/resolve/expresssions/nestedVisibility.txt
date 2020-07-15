@@ -1,46 +1,46 @@
 FILE: nestedVisibility.kt
     public open class Outer : R|kotlin/Any| {
-        public constructor(): R|Outer| {
+        constructor(): R|Outer| {
             super<R|kotlin/Any|>()
         }
 
         private final class PrivateNested : R|kotlin/Any| {
-            public[private] constructor(): R|Outer.PrivateNested| {
+            constructor(): R|Outer.PrivateNested| {
                 super<R|kotlin/Any|>()
             }
 
         }
 
         private final inner class PrivateInner : R|kotlin/Any| {
-            public[private] constructor(): R|Outer.PrivateInner| {
+            constructor(): R|Outer.PrivateInner| {
                 super<R|kotlin/Any|>()
             }
 
         }
 
         protected final class ProtectedNested : R|kotlin/Any| {
-            public[protected] constructor(): R|Outer.ProtectedNested| {
+            constructor(): R|Outer.ProtectedNested| {
                 super<R|kotlin/Any|>()
             }
 
         }
 
         protected final inner class ProtectedInner : R|kotlin/Any| {
-            public[protected] constructor(): R|Outer.ProtectedInner| {
+            constructor(): R|Outer.ProtectedInner| {
                 super<R|kotlin/Any|>()
             }
 
         }
 
         public final class PublicNested : R|kotlin/Any| {
-            public constructor(): R|Outer.PublicNested| {
+            constructor(): R|Outer.PublicNested| {
                 super<R|kotlin/Any|>()
             }
 
         }
 
         public final inner class PublicInner : R|kotlin/Any| {
-            public constructor(): R|Outer.PublicInner| {
+            constructor(): R|Outer.PublicInner| {
                 super<R|kotlin/Any|>()
             }
 
@@ -48,7 +48,7 @@ FILE: nestedVisibility.kt
 
     }
     public final class Derived : R|Outer| {
-        public constructor(): R|Derived| {
+        constructor(): R|Derived| {
             super<R|Outer|>()
         }
 

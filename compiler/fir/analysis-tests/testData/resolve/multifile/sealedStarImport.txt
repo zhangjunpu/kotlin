@@ -1,18 +1,18 @@
 FILE: test.kt
     public sealed class Test : R|kotlin/Any| {
-        private constructor(): R|test/Test| {
+        constructor(): R|test/Test| {
             super<R|kotlin/Any|>()
         }
 
         public final object O : R|test/Test| {
-            private constructor(): R|test/Test.O| {
+            constructor(): R|test/Test.O| {
                 super<R|test/Test|>()
             }
 
         }
 
         public final class Extra : R|test/Test| {
-            public constructor(x: R|kotlin/Int|): R|test/Test.Extra| {
+            constructor(x: R|kotlin/Int|): R|test/Test.Extra| {
                 super<R|test/Test|>()
             }
 
@@ -24,7 +24,7 @@ FILE: test.kt
     }
 FILE: main.kt
     public abstract class Factory : R|kotlin/Any| {
-        public constructor(): R|other/Factory| {
+        constructor(): R|other/Factory| {
             super<R|kotlin/Any|>()
         }
 

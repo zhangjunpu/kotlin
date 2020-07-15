@@ -1,6 +1,6 @@
 FILE: annotations.kt
     public final annotation class MyAnn : R|kotlin/Annotation| {
-        public constructor(): R|MyAnn| {
+        constructor(): R|MyAnn| {
             super<R|kotlin/Any|>()
         }
 

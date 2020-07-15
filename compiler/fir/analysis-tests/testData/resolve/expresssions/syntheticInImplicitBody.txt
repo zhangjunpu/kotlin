@@ -1,6 +1,6 @@
 FILE: User.kt
     public final class User : R|Owner| {
-        public constructor(): R|User| {
+        constructor(): R|User| {
             super<R|Owner|>()
         }
 

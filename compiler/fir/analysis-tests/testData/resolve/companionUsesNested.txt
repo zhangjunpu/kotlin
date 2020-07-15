@@ -1,11 +1,11 @@
 FILE: companionUsesNested.kt
     public abstract class Base : R|kotlin/Any| {
-        public constructor(): R|Base| {
+        constructor(): R|Base| {
             super<R|kotlin/Any|>()
         }
 
         public final class BaseNested : R|kotlin/Any| {
-            public constructor(): R|Base.BaseNested| {
+            constructor(): R|Base.BaseNested| {
                 super<R|kotlin/Any|>()
             }
 
@@ -13,19 +13,19 @@ FILE: companionUsesNested.kt
 
     }
     public final class Derived : R|Base| {
-        public constructor(): R|Derived| {
+        constructor(): R|Derived| {
             super<R|Base|>()
         }
 
         public final class DerivedNested : R|kotlin/Any| {
-            public constructor(): R|Derived.DerivedNested| {
+            constructor(): R|Derived.DerivedNested| {
                 super<R|kotlin/Any|>()
             }
 
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|Derived.Companion| {
+            constructor(): R|Derived.Companion| {
                 super<R|kotlin/Any|>()
             }
 

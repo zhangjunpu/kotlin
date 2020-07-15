@@ -1,6 +1,6 @@
 FILE: simpleFakeOverride.kt
     public open class A<T> : R|kotlin/Any| {
-        public constructor<T>(): R|A<T>| {
+        constructor<T>(): R|A<T>| {
             super<R|kotlin/Any|>()
         }
 
@@ -10,13 +10,13 @@ FILE: simpleFakeOverride.kt
 
     }
     public final class Some : R|kotlin/Any| {
-        public constructor(): R|Some| {
+        constructor(): R|Some| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class B : R|A<Some>| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|A<Some>|>()
         }
 

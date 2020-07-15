@@ -1,11 +1,11 @@
 FILE: main.kt
     public final class A : R|JavaClass| {
-        public constructor(): R|A| {
+        constructor(): R|A| {
             super<R|JavaClass|>()
         }
 
         public final companion object Companion : R|kotlin/Any| {
-            private constructor(): R|A.Companion| {
+            constructor(): R|A.Companion| {
                 super<R|kotlin/Any|>()
             }
 

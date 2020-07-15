@@ -1,12 +1,12 @@
 FILE: projectionsOnNonClassTypeArguments.kt
     public final class A<in T, out K> : R|kotlin/Any| {
-        public constructor<in T, out K>(): R|A<T, K>| {
+        constructor<in T, out K>(): R|A<T, K>| {
             super<R|kotlin/Any|>()
         }
 
     }
     public final class B : R|kotlin/Any| {
-        public constructor(): R|B| {
+        constructor(): R|B| {
             super<R|kotlin/Any|>()
         }
 

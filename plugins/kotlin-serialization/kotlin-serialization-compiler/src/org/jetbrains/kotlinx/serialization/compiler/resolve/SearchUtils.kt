@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyAnnotationDescriptor
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.KotlinTypeFactory
+import org.jetbrains.kotlin.utils.addToStdlib.firstNotNullResult
 
 internal fun ClassConstructorDescriptor.isSerializationCtor(): Boolean {
     /*kind == CallableMemberDescriptor.Kind.SYNTHESIZED does not work because DeserializedClassConstructorDescriptor loses its kind*/
@@ -89,15 +90,14 @@ private fun ModuleDescriptor.getFromPackage(packageFqName: FqName, classSimpleNa
     )
 ) { "Can't locate class $classSimpleName from package $packageFqName" }
 
-internal fun ClassDescriptor.getClassFromSerializationPackage(classSimpleName: String) =
-    requireNotNull(
-        module.findClassAcrossModuleDependencies(
-            ClassId(
-                SerializationPackages.packageFqName,
-                Name.identifier(classSimpleName)
-            )
-        )
-    ) { "Can't locate class $classSimpleName" }
+internal fun ClassDescriptor.getClassFromSerializationPackage(classSimpleName: String): ClassDescriptor {
+    return SerializationPackages.allPublicPackages.firstNotNullResult { pkg ->
+        module.findClassAcrossModuleDependencies(ClassId(
+            pkg,
+            Name.identifier(classSimpleName)
+        ))
+    } ?: throw IllegalArgumentException("Can't locate class $classSimpleName")
+}
 
 internal fun ClassDescriptor.getClassFromInternalSerializationPackage(classSimpleName: String) =
     module.getClassFromInternalSerializationPackage(classSimpleName)

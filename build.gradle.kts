@@ -461,6 +461,9 @@ allprojects {
             ignore("META-INF/compiler.version")
             ignore("META-INF/plugin.xml")
             ignore("kotlin/KotlinVersionCurrentValue.class")
+
+            // Some idea artifacts contain file $$size$$ which contents are different between IC and IU
+            ignore("META-INF/jb/${'$'}${'$'}size${'$'}${'$'}")
         }
     }
 

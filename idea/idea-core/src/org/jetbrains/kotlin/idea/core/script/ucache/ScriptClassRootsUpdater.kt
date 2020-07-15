@@ -68,7 +68,9 @@ abstract class ScriptClassRootsUpdater(
     /**
      * Wee need CAS due to concurrent unblocking sync update in [checkInvalidSdks]
      */
-    private val cache: AtomicReference<ScriptClassRootsCache> = AtomicReference(recreateRootsCache())
+    private val cache by lazy {
+        AtomicReference(recreateRootsCache())
+    }
 
     init {
         @Suppress("LeakingThis")

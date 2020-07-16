@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.lazy.IrLazyFunction
+import org.jetbrains.kotlin.ir.declarations.lazy.IrLazyProperty
 import org.jetbrains.kotlin.ir.expressions.*
 import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
 import org.jetbrains.kotlin.ir.symbols.IrClassifierSymbol
@@ -91,8 +92,17 @@ abstract class IrBasedDeclarationDescriptor<T : IrDeclaration>(val owner: T) : D
     }
 
     @OptIn(ObsoleteDescriptorBasedAPI::class)
-    override fun getContainingDeclaration() = (owner.parent as IrSymbolOwner)?.let {
+    override fun getContainingDeclaration() = (owner.parent as IrSymbolOwner).let {
         if (it is IrDeclaration) it.toIrBasedDescriptor() else it.symbol.descriptor
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is IrBasedDeclarationDescriptor<*>) return false
+        return owner == other.owner
+    }
+
+    override fun hashCode(): Int {
+        return owner.hashCode()
     }
 }
 
@@ -606,7 +616,7 @@ open class IrBasedClassDescriptor(
     override fun getConstructors() =
         owner.declarations.filterIsInstance<IrConstructor>().filter { !it.origin.isSynthetic }.map { it.toIrBasedDescriptor() }.toList()
 
-    override fun getContainingDeclaration() = (owner.parent as IrSymbolOwner)?.let {
+    override fun getContainingDeclaration() = (owner.parent as IrSymbolOwner).let {
         if (it is IrDeclaration) it.toIrBasedDescriptor() else it.symbol.descriptor
     }
 
@@ -710,7 +720,7 @@ open class IrBasedEnumEntryDescriptor(
 
     private fun getCorrespondingClass() = owner.correspondingClass ?: (owner.parent as IrClass)
 
-    override fun getContainingDeclaration() = (owner.parent as IrSymbolOwner)?.let {
+    override fun getContainingDeclaration() = (owner.parent as IrSymbolOwner).let {
         if (it is IrDeclaration) it.toIrBasedDescriptor() else it.symbol.descriptor
     }
 
@@ -894,13 +904,13 @@ open class IrBasedPropertyDescriptor(
 }
 
 class IrBasedPropertyDescriptorWithContainerSource(
-    owner: IrProperty,
-    override var containerSource: DeserializedContainerSource?
-) : IrBasedPropertyDescriptor(owner), DescriptorWithContainerSource
+    owner: IrProperty
+) : IrBasedPropertyDescriptor(owner), DescriptorWithContainerSource {
+    override val containerSource: DeserializedContainerSource? = owner.containerSource
+}
 
-// TODO: store containerSource in IrProperty
-fun IrProperty.toIrBasedDescriptor() = if (getter?.originalDeclaration is IrLazyFunction)
-    IrBasedPropertyDescriptorWithContainerSource(this, getter!!.containerSource as DeserializedContainerSource?)
+fun IrProperty.toIrBasedDescriptor() = if (originalDeclaration is IrLazyProperty || containerSource != null)
+    IrBasedPropertyDescriptorWithContainerSource(this)
 else
     IrBasedPropertyDescriptor(this)
 
@@ -1078,7 +1088,7 @@ open class IrBasedFieldDescriptor(
 
     override fun isConst() = false
 
-    override fun getContainingDeclaration() = (owner.parent as IrSymbolOwner)?.let {
+    override fun getContainingDeclaration() = (owner.parent as IrSymbolOwner).let {
         if (it is IrDeclaration) it.toIrBasedDescriptor() else it.symbol.descriptor
     }
 

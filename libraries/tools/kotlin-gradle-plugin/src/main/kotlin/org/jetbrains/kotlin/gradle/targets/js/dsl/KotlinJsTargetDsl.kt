@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsBinaryContainer
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsExec
 import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 interface KotlinJsSubTargetContainerDsl : KotlinTarget {
     val nodejs: KotlinJsNodeDsl
@@ -73,6 +74,13 @@ interface KotlinJsSubTargetDsl {
 }
 
 interface KotlinJsBrowserDsl : KotlinJsSubTargetDsl {
+    fun commonWebpackConfig(body: KotlinWebpackConfig.() -> Unit)
+    fun commonWebpackConfig(fn: Closure<*>) {
+        commonWebpackConfig {
+            ConfigureUtil.configure(fn, this)
+        }
+    }
+
     fun runTask(body: KotlinWebpack.() -> Unit)
     fun runTask(fn: Closure<*>) {
         runTask {

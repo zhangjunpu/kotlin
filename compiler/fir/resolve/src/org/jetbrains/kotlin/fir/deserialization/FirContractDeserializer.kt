@@ -24,6 +24,7 @@ class FirContractDeserializer(private val c: FirDeserializationContext) {
     fun loadContract(proto: ProtoBuf.Contract, owner: FirContractDescriptionOwner): FirContractDescription? {
         val effects = proto.effectList.map { loadPossiblyConditionalEffect(it, owner) ?: return null }
         return buildResolvedContractDescription {
+            this.source = owner.contractDescription.source
             this.effects += effects
         }
     }

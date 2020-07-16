@@ -668,6 +668,7 @@ fun getSomething() = 10
 
         project.build("assembleDebug", options = options) {
             assertSuccessful()
+            assertContains("Synthetic view accessors are deprecated")
         }
     }
 

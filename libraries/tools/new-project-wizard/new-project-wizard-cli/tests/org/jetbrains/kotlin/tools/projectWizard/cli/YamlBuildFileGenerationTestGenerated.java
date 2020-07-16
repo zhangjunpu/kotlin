@@ -82,4 +82,9 @@ public class YamlBuildFileGenerationTestGenerated extends AbstractYamlBuildFileG
     public void testSingleplatformJs() throws Exception {
         runTest("libraries/tools/new-project-wizard/new-project-wizard-cli/testData/buildFileGeneration/singleplatformJs/");
     }
+
+    @TestMetadata("singleplatformJsNoneTestFramework")
+    public void testSingleplatformJsNoneTestFramework() throws Exception {
+        runTest("libraries/tools/new-project-wizard/new-project-wizard-cli/testData/buildFileGeneration/singleplatformJsNoneTestFramework/");
+    }
 }

@@ -1,0 +1,7 @@
+kotlin:
+  projectKind: js
+  modules:
+    - type:
+        name: jsSingleplatform
+        testFramework: NONE
+      name: a

@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.BuildSystemIR
 import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.KotlinBuildSystemPluginIR
 import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.gradle.GradleIRListBuilder
 import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.gradle.irsList
+import org.jetbrains.kotlin.tools.projectWizard.moduleConfigurators.ModuleConfiguratorWithTests.Companion.testFramework
 import org.jetbrains.kotlin.tools.projectWizard.phases.GenerationPhase
 import org.jetbrains.kotlin.tools.projectWizard.plugins.kotlin.ModuleType
 import org.jetbrains.kotlin.tools.projectWizard.plugins.kotlin.ModulesToIrConversionData
@@ -32,6 +33,9 @@ interface JSConfigurator : ModuleConfiguratorWithModuleType, ModuleConfiguratorW
     fun Reader.hasCssSupport(module: Module): Boolean =
         settingsValue(module, cssSupport)
 
+    fun Reader.hasTestFramework(module: Module): Boolean =
+        settingValue(module, testFramework) != KotlinTestFramework.NONE
+
     fun GradleIRListBuilder.browserSubTarget(module: Module, reader: Reader) {
         "browser" {
             if (reader.isApplication(module)) {
@@ -41,7 +45,9 @@ interface JSConfigurator : ModuleConfiguratorWithModuleType, ModuleConfiguratorW
                 if (reader.isApplication(module)) {
                     applicationCssSupport()
                 }
-                testCssSupport()
+                if (reader.hasTestFramework(module)) {
+                    testCssSupport()
+                }
             }
         }
     }

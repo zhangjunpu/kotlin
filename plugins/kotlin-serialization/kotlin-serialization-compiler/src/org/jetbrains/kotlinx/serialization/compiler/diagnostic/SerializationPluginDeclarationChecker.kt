@@ -7,6 +7,7 @@ package org.jetbrains.kotlinx.serialization.compiler.diagnostic
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
+import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0
 import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
@@ -17,6 +18,7 @@ import org.jetbrains.kotlin.resolve.checkers.DeclarationCheckerContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperClassOrAny
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperInterfaces
+import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.hasBackingField
 import org.jetbrains.kotlin.resolve.isInlineClassType
 import org.jetbrains.kotlin.resolve.jvm.annotations.TRANSIENT_ANNOTATION_FQ_NAME
@@ -40,10 +42,26 @@ open class SerializationPluginDeclarationChecker : DeclarationChecker {
 
         if (!canBeSerializedInternally(descriptor, declaration, context.trace)) return
         if (declaration !is KtPureClassOrObject) return
+        // todo: cache value with versions
+        VersionReader.getVersionsForCurrentModule(descriptor.module)?.let { checkMinKotlin(it, descriptor, context.trace) }
         val props = buildSerializableProperties(descriptor, context.trace) ?: return
         checkCorrectTransientAnnotationIsUsed(descriptor, props.serializableProperties, context.trace)
         checkTransients(declaration, context.trace)
         analyzePropertiesSerializers(context.trace, descriptor, props.serializableProperties)
+    }
+
+    private fun checkMinKotlin(versions: VersionReader.RuntimeVersions, descriptor: ClassDescriptor, trace: BindingTrace) {
+        if (versions.currentCompilerMatchRequired()) return
+        descriptor.onSerializableAnnotation {
+            trace.report(
+                SerializationErrors.REQUIRED_KOTLIN_TOO_HIGH.on(
+                    it,
+                    KotlinCompilerVersion.getVersion() ?: "N/A",
+                    versions.requireKotlinVersion?.toString() ?: "N/A",
+                    versions.implementationVersion?.toString() ?: "N/A"
+                )
+            )
+        }
     }
 
     private fun checkCorrectTransientAnnotationIsUsed(
@@ -127,7 +145,7 @@ open class SerializationPluginDeclarationChecker : DeclarationChecker {
         val namesSet = mutableSetOf<String>()
         props.serializableProperties.forEach {
             if (!namesSet.add(it.name)) {
-                descriptor.safeReport { a ->
+                descriptor.onSerializableAnnotation { a ->
                     trace.report(SerializationErrors.DUPLICATE_SERIAL_NAME.on(a, it.name))
                 }
             }
@@ -238,12 +256,12 @@ open class SerializationPluginDeclarationChecker : DeclarationChecker {
             )
     }
 
-    private inline fun ClassDescriptor.safeReport(report: (KtAnnotationEntry) -> Unit) {
+    private inline fun ClassDescriptor.onSerializableAnnotation(report: (KtAnnotationEntry) -> Unit) {
         findSerializableAnnotationDeclaration()?.let(report)
     }
 
     private fun BindingTrace.reportOnSerializableAnnotation(descriptor: ClassDescriptor, error: DiagnosticFactory0<in KtAnnotationEntry>) {
-        descriptor.safeReport { e ->
+        descriptor.onSerializableAnnotation { e ->
             report(error.on(e))
         }
     }

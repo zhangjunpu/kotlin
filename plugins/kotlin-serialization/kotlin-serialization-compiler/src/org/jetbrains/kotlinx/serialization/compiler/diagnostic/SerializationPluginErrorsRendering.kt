@@ -69,5 +69,13 @@ object SerializationPluginErrorsRendering : DefaultErrorMessages.Extension {
             SerializationErrors.INCORRECT_TRANSIENT,
             "@kotlin.jvm.Transient does not affect @Serializable classes. Please use @kotlinx.serialization.Transient instead."
         )
+        MAP.put(
+            SerializationErrors.REQUIRED_KOTLIN_TOO_HIGH,
+            "Your current Kotlin version is ''{0}'', while kotlinx.serialization core runtime ''{2}'' requires at least Kotlin ''{1}''. " +
+                    "Please update your Kotlin compiler and IDE plugin.",
+            Renderers.STRING,
+            Renderers.STRING,
+            Renderers.STRING
+        )
     }
 }

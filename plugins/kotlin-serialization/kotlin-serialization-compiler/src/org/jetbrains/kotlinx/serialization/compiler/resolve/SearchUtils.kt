@@ -78,6 +78,7 @@ internal fun ModuleDescriptor.getClassFromInternalSerializationPackage(classSimp
 internal fun getSerializationPackageFqn(classSimpleName: String): FqName =
     SerializationPackages.packageFqName.child(Name.identifier(classSimpleName))
 
+// todo: unify ClassDesc.getClass... and ModuleDesc.getClass...
 internal fun ModuleDescriptor.getClassFromSerializationPackage(classSimpleName: String) =
     getFromPackage(SerializationPackages.packageFqName, classSimpleName)
 

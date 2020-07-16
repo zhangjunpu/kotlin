@@ -73,32 +73,28 @@ internal fun getInternalPackageFqn(classSimpleName: String): FqName =
     SerializationPackages.internalPackageFqName.child(Name.identifier(classSimpleName))
 
 internal fun ModuleDescriptor.getClassFromInternalSerializationPackage(classSimpleName: String) =
-    getFromPackage(SerializationPackages.internalPackageFqName, classSimpleName)
+    requireNotNull(
+        findClassAcrossModuleDependencies(
+            ClassId(
+                SerializationPackages.internalPackageFqName,
+                Name.identifier(classSimpleName)
+            )
+        )
+    ) { "Can't locate class $classSimpleName from package ${SerializationPackages.internalPackageFqName}" }
 
 internal fun getSerializationPackageFqn(classSimpleName: String): FqName =
     SerializationPackages.packageFqName.child(Name.identifier(classSimpleName))
 
-// todo: unify ClassDesc.getClass... and ModuleDesc.getClass...
 internal fun ModuleDescriptor.getClassFromSerializationPackage(classSimpleName: String) =
-    getFromPackage(SerializationPackages.packageFqName, classSimpleName)
-
-private fun ModuleDescriptor.getFromPackage(packageFqName: FqName, classSimpleName: String) = requireNotNull(
-    findClassAcrossModuleDependencies(
-        ClassId(
-            packageFqName,
-            Name.identifier(classSimpleName)
-        )
-    )
-) { "Can't locate class $classSimpleName from package $packageFqName" }
-
-internal fun ClassDescriptor.getClassFromSerializationPackage(classSimpleName: String): ClassDescriptor {
-    return SerializationPackages.allPublicPackages.firstNotNullResult { pkg ->
+    SerializationPackages.allPublicPackages.firstNotNullResult { pkg ->
         module.findClassAcrossModuleDependencies(ClassId(
             pkg,
             Name.identifier(classSimpleName)
         ))
     } ?: throw IllegalArgumentException("Can't locate class $classSimpleName")
-}
+
+internal fun ClassDescriptor.getClassFromSerializationPackage(classSimpleName: String) =
+    module.getClassFromSerializationPackage(classSimpleName)
 
 internal fun ClassDescriptor.getClassFromInternalSerializationPackage(classSimpleName: String) =
     module.getClassFromInternalSerializationPackage(classSimpleName)

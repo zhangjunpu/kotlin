@@ -64,7 +64,7 @@ constructor(
                 (this as KotlinJsSubTarget).produceExecutable()
             }
 
-            compilation.binaries.executableLegacyInternal(compilation)
+//            compilation.binaries.executableLegacyInternal(compilation)
         }
     }
 
@@ -74,7 +74,7 @@ constructor(
         create = ::Executable
     )
 
-    private fun executableLegacyInternal(compilation: KotlinJsCompilation) = createBinaries(
+    internal fun executableLegacyInternal(compilation: KotlinJsCompilation) = createBinaries(
         compilation = compilation,
         jsBinaryType = KotlinJsBinaryType.EXECUTABLE,
         create = { compilation, name, type ->

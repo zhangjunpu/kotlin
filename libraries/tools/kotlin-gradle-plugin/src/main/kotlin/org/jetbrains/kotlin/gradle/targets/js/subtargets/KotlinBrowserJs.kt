@@ -134,8 +134,10 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
 
                 if (type == KotlinJsBinaryMode.DEVELOPMENT) {
                     target.runTask.dependsOn(runTask)
-                    commonRunTask.configure {
-                        it.dependsOn(runTask)
+                    onExecutables.add {
+                        commonRunTask.configure {
+                            it.dependsOn(runTask)
+                        }
                     }
                 }
             }
@@ -208,9 +210,11 @@ open class KotlinBrowserJs @Inject constructor(target: KotlinJsTarget) :
                 }
 
                 if (type == KotlinJsBinaryMode.PRODUCTION) {
-                    assembleTaskProvider.dependsOn(webpackTask)
-                    webpackCommonTaskProvider.configure {
-                        it.dependsOn(webpackTask)
+                    onExecutables.add {
+                        assembleTaskProvider.dependsOn(webpackTask)
+                        webpackCommonTaskProvider.configure {
+                            it.dependsOn(webpackTask)
+                        }
                     }
                 }
             }

@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.npm.NpmResolverPlugin
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 import org.jetbrains.kotlin.gradle.tasks.registerTask
 import org.jetbrains.kotlin.gradle.testing.internal.configureConventions
 import org.jetbrains.kotlin.gradle.testing.internal.kotlinTestRegistry
@@ -35,6 +36,14 @@ abstract class KotlinJsSubTarget(
 ) : KotlinJsSubTargetDsl {
     val project get() = target.project
 
+    init {
+        target.compilations.all { compilation ->
+            if (compilation.isMain()) {
+                compilation.binaries.executableLegacyInternal(compilation)
+            }
+        }
+    }
+
     private val nodeJs = NodeJsRootPlugin.apply(project.rootProject)
 
     abstract val testTaskDescription: String
@@ -44,10 +53,13 @@ abstract class KotlinJsSubTarget(
 
     protected val taskGroupName = "Kotlin $disambiguationClassifier"
 
+    protected val onExecutables: MutableList<() -> Unit> = mutableListOf()
+
     private var isExecutable: Boolean = false
 
     private val produceExecutableDelegate: Unit by lazy {
         isExecutable = true
+        onExecutables.forEach { it() }
     }
 
     internal fun produceExecutable() {
@@ -167,23 +179,27 @@ abstract class KotlinJsSubTarget(
             args = args,
             body = {
                 it.doFirst {
-                    if (!isExecutable) {
-                        throw GradleException(
-                            """
-                            Task '$name' is accessible only for executable output.
-                            Probably you need to configure executable for project '${project.name} (${project.path})'
-                            kotlin {
-                                js {
-                                    binaries.executable()
-                                }
-                            }
-                            """.trimIndent()
-                        )
-                    }
+                    executableException(name)
                 }
                 body(it)
             }
         )
+
+    private fun executableException(name: String) {
+        if (!isExecutable) {
+            throw GradleException(
+                """
+                Task '$name' is accessible only for executable output.
+                Probably you need to configure executable for project '${project.name} (${project.path})'
+                kotlin {
+                    js {
+                        binaries.executable()
+                    }
+                }
+                """.trimIndent()
+            )
+        }
+    }
 
     internal inline fun <reified T : Task> registerSubTargetTask(
         name: String,

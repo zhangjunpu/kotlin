@@ -476,6 +476,7 @@ class JavaToJKTreeBuilder constructor(
                 is JKFieldSymbol -> JKFieldAccessExpression(symbol)
                 is JKPackageSymbol -> JKPackageAccessExpression(symbol)
                 is JKMethodSymbol -> JKMethodAccessExpression(symbol)
+                is JKTypeParameterSymbol -> JKTypeQualifierExpression(JKTypeParameterType(symbol))
                 else -> throwCanNotConvertError("unexpected symbol ${symbol::class}")
             }.qualified(qualifierExpression?.toJK()).also {
                 it.withFormattingFrom(this)

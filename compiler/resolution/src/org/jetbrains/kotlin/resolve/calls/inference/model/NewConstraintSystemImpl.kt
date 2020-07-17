@@ -7,10 +7,7 @@ package org.jetbrains.kotlin.resolve.calls.inference.model
 
 import org.jetbrains.kotlin.resolve.calls.components.PostponedArgumentsAnalyzer
 import org.jetbrains.kotlin.resolve.calls.inference.*
-import org.jetbrains.kotlin.resolve.calls.inference.components.ConstraintInjector
-import org.jetbrains.kotlin.resolve.calls.inference.components.KotlinConstraintSystemCompleter
-import org.jetbrains.kotlin.resolve.calls.inference.components.PostponedArgumentInputTypesResolver
-import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
+import org.jetbrains.kotlin.resolve.calls.inference.components.*
 import org.jetbrains.kotlin.resolve.calls.model.KotlinCallDiagnostic
 import org.jetbrains.kotlin.resolve.calls.model.OnlyInputTypesDiagnostic
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedAtom
@@ -33,6 +30,7 @@ class NewConstraintSystemImpl(
     ResultTypeResolver.Context,
     KotlinConstraintSystemCompleter.Context,
     PostponedArgumentInputTypesResolver.Context,
+    VariableFixationOrderResolver.Context,
     PostponedArgumentsAnalyzer.Context {
     private val storage = MutableConstraintStorage()
     private var state = State.BUILDING
@@ -90,6 +88,7 @@ class NewConstraintSystemImpl(
     override fun asPostponedArgumentsAnalyzerContext() = apply { checkState(State.BUILDING) }
 
     override fun asPostponedArgumentInputTypesResolverContext() = apply { checkState(State.BUILDING) }
+    override fun asVariableFixationOrderResolverContext() = apply { checkState(State.BUILDING) }
 
     // ConstraintSystemOperation
     override fun registerVariable(variable: TypeVariableMarker) {

@@ -23,7 +23,9 @@ class KotlinConstraintSystemCompleter(
     private val resultTypeResolver: ResultTypeResolver,
     val variableFixationFinder: VariableFixationFinder,
 ) {
-    private val postponedArgumentInputTypesResolver = PostponedArgumentInputTypesResolver(resultTypeResolver, variableFixationFinder)
+    private val variableFixationOrderResolver = VariableFixationOrderResolver(resultTypeResolver)
+    private val postponedArgumentInputTypesResolver =
+        PostponedArgumentInputTypesResolver(resultTypeResolver, variableFixationFinder, variableFixationOrderResolver)
 
     enum class ConstraintSystemCompletionMode {
         FULL,
@@ -49,6 +51,8 @@ class KotlinConstraintSystemCompleter(
         fun fixVariable(variable: TypeVariableMarker, resultType: KotlinTypeMarker, atom: ResolvedAtom?)
 
         fun asPostponedArgumentInputTypesResolverContext(): PostponedArgumentInputTypesResolver.Context
+
+        fun asVariableFixationOrderResolverContext(): VariableFixationOrderResolver.Context
     }
 
     fun runCompletion(
@@ -279,13 +283,17 @@ class KotlinConstraintSystemCompleter(
         diagnosticsHolder: KotlinDiagnosticsHolder
     ): Boolean {
         while (true) {
-            val variableForFixation = getVariableReadyForFixation(
+            val firstVariableForFixation = variableFixationFinder.findFirstVariableForFixation(
+                this,
+                getOrderedAllTypeVariables(collectVariablesFromContext, topLevelAtoms),
+                postponedArguments,
                 completionMode,
-                topLevelAtoms,
-                topLevelType,
-                collectVariablesFromContext,
-                postponedArguments
+                topLevelType
             ) ?: break
+            val variableForFixation = variableFixationOrderResolver.resolveByResultTypeSpecificityIfNeeded(
+                asVariableFixationOrderResolverContext(),
+                firstVariableForFixation
+            )
 
             if (!variableForFixation.hasProperConstraint && completionMode == ConstraintSystemCompletionMode.PARTIAL)
                 break
@@ -383,27 +391,15 @@ class KotlinConstraintSystemCompleter(
         return result.toList()
     }
 
-    private fun Context.getVariableReadyForFixation(
-        completionMode: ConstraintSystemCompletionMode,
-        topLevelAtoms: List<ResolvedAtom>,
-        topLevelType: UnwrappedType,
-        collectVariablesFromContext: Boolean,
-        postponedArguments: List<PostponedResolvedAtom>
-    ) = variableFixationFinder.findFirstVariableForFixation(
-        this,
-        getOrderedAllTypeVariables(collectVariablesFromContext, topLevelAtoms),
-        postponedArguments,
-        completionMode,
-        topLevelType
-    )
-
     private fun Context.isThereAnyReadyForFixationVariable(
         completionMode: ConstraintSystemCompletionMode,
         topLevelAtoms: List<ResolvedAtom>,
         topLevelType: UnwrappedType,
         collectVariablesFromContext: Boolean,
         postponedArguments: List<PostponedResolvedAtom>
-    ) = getVariableReadyForFixation(completionMode, topLevelAtoms, topLevelType, collectVariablesFromContext, postponedArguments) != null
+    ) = variableFixationFinder.findFirstVariableForFixation(
+        this, getOrderedAllTypeVariables(collectVariablesFromContext, topLevelAtoms), postponedArguments, completionMode, topLevelType
+    ) != null
 
     companion object {
         fun getOrderedNotAnalyzedPostponedArguments(topLevelAtoms: List<ResolvedAtom>): List<PostponedResolvedAtom> {

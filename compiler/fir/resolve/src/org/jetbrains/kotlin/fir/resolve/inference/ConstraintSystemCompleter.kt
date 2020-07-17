@@ -44,6 +44,7 @@ class ConstraintSystemCompleter(private val components: BodyResolveComponents) {
 
             val allTypeVariables = getOrderedAllTypeVariables(c, topLevelAtoms, collectVariablesFromContext)
             val postponedAtoms = getOrderedNotAnalyzedPostponedArguments(topLevelAtoms)
+            // TODO: take into account resolution of variables with the same readiness (see the current KotlinConstraintSystemCompleter)
             val variableForFixation =
                 variableFixationFinder.findFirstVariableForFixation(
                     c, allTypeVariables, postponedAtoms, completionMode, candidateReturnType

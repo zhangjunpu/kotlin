@@ -11023,6 +11023,11 @@ public class DiagnosticsUsingJavacTestGenerated extends AbstractDiagnosticsUsing
                     public void testTakingExtensibilityFromDeclarationOfAnonymousFunction() throws Exception {
                         runTest("compiler/testData/diagnostics/tests/inference/completion/postponedArgumentsAnalysis/takingExtensibilityFromDeclarationOfAnonymousFunction.kt");
                     }
+
+                    @TestMetadata("wrongVariableFixationOrder.kt")
+                    public void testWrongVariableFixationOrder() throws Exception {
+                        runTest("compiler/testData/diagnostics/tests/inference/completion/postponedArgumentsAnalysis/wrongVariableFixationOrder.kt");
+                    }
                 }
             }
 

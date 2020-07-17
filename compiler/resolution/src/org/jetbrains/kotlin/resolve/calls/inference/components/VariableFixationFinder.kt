@@ -40,7 +40,8 @@ class VariableFixationFinder(
     data class VariableForFixation(
         val variable: TypeConstructorMarker,
         val hasProperConstraint: Boolean,
-        val hasOnlyTrivialProperConstraint: Boolean = false
+        val hasOnlyTrivialProperConstraint: Boolean = false,
+        val variablesWithSameReadiness: Set<TypeConstructorMarker>? = null
     )
 
     fun findFirstVariableForFixation(
@@ -87,7 +88,7 @@ class VariableFixationFinder(
         }
     }
 
-    fun Context.variableHasTrivialOrNonProperConstraints(variable: TypeConstructorMarker): Boolean {
+    private fun Context.variableHasTrivialOrNonProperConstraints(variable: TypeConstructorMarker): Boolean {
         return notFixedTypeVariables[variable]?.constraints?.all { constraint ->
             val isProperConstraint = isProperArgumentConstraint(constraint)
             isProperConstraint && trivialConstraintTypeInferenceOracle.isNotInterestingConstraint(constraint) || !isProperConstraint
@@ -105,17 +106,17 @@ class VariableFixationFinder(
         val dependencyProvider = TypeVariableDependencyInformationProvider(
             notFixedTypeVariables, postponedArguments, topLevelType.takeIf { completionMode == PARTIAL }, this
         )
+        val variablesByReadiness = allTypeVariables.groupBy { getTypeVariableReadiness(it, dependencyProvider) }
+        val candidates = variablesByReadiness.maxByOrNull { (readiness, _) -> readiness }?.value ?: return null
+        val candidate = candidates.first()
 
-        val candidate = allTypeVariables.maxBy { getTypeVariableReadiness(it, dependencyProvider) } ?: return null
-
-        val candidateReadiness = getTypeVariableReadiness(candidate, dependencyProvider)
-        return when (candidateReadiness) {
+        return when (getTypeVariableReadiness(candidate, dependencyProvider)) {
             TypeVariableFixationReadiness.FORBIDDEN -> null
             TypeVariableFixationReadiness.WITHOUT_PROPER_ARGUMENT_CONSTRAINT -> VariableForFixation(candidate, false)
             TypeVariableFixationReadiness.WITH_TRIVIAL_OR_NON_PROPER_CONSTRAINTS ->
                 VariableForFixation(candidate, hasProperConstraint = true, hasOnlyTrivialProperConstraint = true)
 
-            else -> VariableForFixation(candidate, true)
+            else -> VariableForFixation(candidate, true, variablesWithSameReadiness = candidates.toSet())
         }
     }
 

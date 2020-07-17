@@ -18,7 +18,8 @@ import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 class PostponedArgumentInputTypesResolver(
     private val resultTypeResolver: ResultTypeResolver,
-    private val variableFixationFinder: VariableFixationFinder
+    private val variableFixationFinder: VariableFixationFinder,
+    private val variableFixationOrderResolver: VariableFixationOrderResolver
 ) {
     interface Context : KotlinConstraintSystemCompleter.Context
 
@@ -456,13 +457,17 @@ class PostponedArgumentInputTypesResolver(
     ): Boolean {
         val relatedVariables = type.getPureArgumentsForFunctionalTypeOrSubtype()
             .flatMap { getAllDeeplyRelatedTypeVariables(it, dependencyProvider) }
-        val variableForFixation = variableFixationFinder.findFirstVariableForFixation(
+        val firstVariableForFixation = variableFixationFinder.findFirstVariableForFixation(
             this, relatedVariables, postponedArguments, KotlinConstraintSystemCompleter.ConstraintSystemCompletionMode.FULL, topLevelType
         )
 
-        if (variableForFixation == null || !variableForFixation.hasProperConstraint)
+        if (firstVariableForFixation == null || !firstVariableForFixation.hasProperConstraint)
             return false
 
+        val variableForFixation = variableFixationOrderResolver.resolveByResultTypeSpecificityIfNeeded(
+            asVariableFixationOrderResolverContext(),
+            firstVariableForFixation
+        )
         val variableWithConstraints = notFixedTypeVariables.getValue(variableForFixation.variable)
         val resultType =
             resultTypeResolver.findResultType(this, variableWithConstraints, TypeVariableDirectionCalculator.ResolveDirection.UNKNOWN)

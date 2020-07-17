@@ -141,14 +141,15 @@ constructor(
         doLast {
             throw GradleException(
                 """
-                Since Kotlin 1.4 webpack and run tasks are registered only for executable modules.
-                It means that if you need it, you probably working in executable module.
-                You need to write in this particular module.
+                Since Kotlin 1.4, tasks related to run your program and use webpack are only registered for modules marked as executable.
+                If you have previously used these tasks, and want to continue using them, you will have to explicitly mark your module as executable.
+                To do this, add the following to the corresponding build file:
                 kotlin {
                     js {
                         binaries.executable()
                     }
                 }
+                More information: https://kotlinlang.org/docs/reference/js-project-setup.html
                 """.trimIndent()
             )
         }

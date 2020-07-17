@@ -1,0 +1,31 @@
+FILE: inLocalClass.kt
+    public final fun bar(x: R|() -> kotlin/Unit|): R|kotlin/Unit| {
+    }
+    @R|kotlin/contracts/ExperimentalContracts|() public final fun foo(x: R|() -> kotlin/Unit|): R|kotlin/Unit|
+        [R|Contract description]
+         <
+            CallsInPlace(x, AT_MOST_ONCE)
+        >
+     {
+        [StubStatement]
+        R|<local>/x|.R|FakeOverride<kotlin/Function0.invoke: R|kotlin/Unit|>|()
+        object : R|java/lang/Runnable| {
+            private[local] constructor(): R|<anonymous>| {
+                super<R|kotlin/Any|>()
+            }
+
+            public[local] final override fun run(): R|kotlin/Unit| {
+                R|<local>/x|.R|FakeOverride<kotlin/Function0.invoke: R|kotlin/Unit|>|()
+            }
+
+        }
+        .R|/<anonymous>.run|()
+        lval baz: R|() -> kotlin/Unit| = fun <anonymous>(): R|kotlin/Unit| {
+            R|<local>/x|.R|FakeOverride<kotlin/Function0.invoke: R|kotlin/Unit|>|()
+        }
+
+        R|/bar|(<L> = bar@fun <anonymous>(): R|kotlin/Unit| {
+            R|<local>/x|.R|FakeOverride<kotlin/Function0.invoke: R|kotlin/Unit|>|()
+        }
+        )
+    }

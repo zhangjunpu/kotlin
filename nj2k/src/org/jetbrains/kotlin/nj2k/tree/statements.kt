@@ -124,17 +124,28 @@ class JKJavaThrowStatement(exception: JKExpression) : JKStatement() {
     override fun accept(visitor: JKVisitor) = visitor.visitJavaThrowStatement(this)
 }
 
+sealed class JKJavaResourceElement : JKTreeElement(), PsiOwner by PsiOwnerImpl()
+
+class JKJavaResourceExpression(expression: JKExpression) : JKJavaResourceElement() {
+    var expression by child(expression)
+}
+class JKJavaResourceDeclaration(declaration: JKLocalVariable) : JKJavaResourceElement() {
+    var declaration by child(declaration)
+}
+
 class JKJavaTryStatement(
-    resourceDeclarations: List<JKDeclaration>,
+    resourceDeclarations: List<JKJavaResourceElement>,
     tryBlock: JKBlock,
     finallyBlock: JKBlock,
     catchSections: List<JKJavaTryCatchSection>
 ) : JKStatement() {
-    var resourceDeclarations: List<JKDeclaration> by children(resourceDeclarations)
+    var resourceDeclarations: List<JKJavaResourceElement> by children(resourceDeclarations)
     var tryBlock: JKBlock by child(tryBlock)
     var finallyBlock: JKBlock by child(finallyBlock)
     var catchSections: List<JKJavaTryCatchSection> by children(catchSections)
     override fun accept(visitor: JKVisitor) = visitor.visitJavaTryStatement(this)
+
+    val isTryWithResources get() = resourceDeclarations.isNotEmpty()
 }
 
 class JKJavaSynchronizedStatement(

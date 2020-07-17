@@ -5,9 +5,12 @@
 
 package org.jetbrains.kotlin.gradle.targets.js
 
+import org.gradle.api.GradleException
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 import org.jetbrains.kotlin.gradle.plugin.*
@@ -22,8 +25,10 @@ import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsBinaryContainer
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrTarget
 import org.jetbrains.kotlin.gradle.targets.js.subtargets.KotlinBrowserJs
+import org.jetbrains.kotlin.gradle.targets.js.subtargets.KotlinJsSubTarget
 import org.jetbrains.kotlin.gradle.targets.js.subtargets.KotlinNodeJs
 import org.jetbrains.kotlin.gradle.tasks.locateTask
+import org.jetbrains.kotlin.gradle.tasks.registerTask
 import org.jetbrains.kotlin.gradle.testing.internal.KotlinTestReport
 import org.jetbrains.kotlin.gradle.testing.testTaskName
 import org.jetbrains.kotlin.gradle.utils.dashSeparatedName
@@ -132,9 +137,44 @@ constructor(
             it.description = "Run js on all configured platforms"
         }
 
+    private fun Task.configureMigrationTask() {
+        doLast {
+            throw GradleException(
+                """
+                Since Kotlin 1.4 webpack and run tasks are registered only for executable modules.
+                It means that if you need it, you probably working in executable module.
+                You need to write in this particular module.
+                kotlin {
+                    js {
+                        binaries.executable()
+                    }
+                }
+                """.trimIndent()
+            )
+        }
+    }
+
+    private val migrationSupport_14 by lazy {
+        project.registerTask<Task>("migrationSupportToKotlin_1.4") {
+            it.group = LifecycleBasePlugin.BUILD_GROUP
+            it.configureMigrationTask()
+        }
+    }
+
+    private fun KotlinJsSubTarget.subTargetMigrationSupport() {
+        registerSubTargetTask<Task>(
+            disambiguateCamelCased("migrationSupportToKotlin_1.4")
+        ) {
+            it.configureMigrationTask()
+        }
+    }
+
     private val browserLazyDelegate = lazy {
+        migrationSupport_14
         project.objects.newInstance(KotlinBrowserJs::class.java, this).also {
             it.configure()
+
+            it.subTargetMigrationSupport()
 
             browserConfiguredHandlers.forEach { handler ->
                 handler(it)
@@ -156,8 +196,12 @@ constructor(
     }
 
     private val nodejsLazyDelegate = lazy {
+        migrationSupport_14
         project.objects.newInstance(KotlinNodeJs::class.java, this).also {
             it.configure()
+
+            it.subTargetMigrationSupport()
+
             nodejsConfiguredHandlers.forEach { handler ->
                 handler(it)
             }

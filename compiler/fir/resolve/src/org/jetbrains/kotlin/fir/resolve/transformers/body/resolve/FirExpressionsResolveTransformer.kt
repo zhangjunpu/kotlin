@@ -126,7 +126,8 @@ open class FirExpressionsResolveTransformer(transformer: FirBodyResolveTransform
 
     fun transformSuperReceiver(
         superReference: FirSuperReference,
-        superReferenceContainer: FirQualifiedAccessExpression
+        superReferenceContainer: FirQualifiedAccessExpression,
+        containingCall: FirQualifiedAccessExpression
     ): FirQualifiedAccessExpression {
         val labelName = superReference.labelName
         val implicitReceiver =
@@ -153,14 +154,19 @@ open class FirExpressionsResolveTransformer(transformer: FirBodyResolveTransform
                             diagnostic = ConeStubDiagnostic(ConeSimpleDiagnostic("No super type", DiagnosticKind.Other))
                         }
                     }
-                    superTypeRefs.size == 1 -> {
-                        superTypeRefs.single()
-                    }
                     else -> {
-                        buildComposedSuperTypeRef {
-                            source = superReferenceContainer.source
-                            superTypeRefs.mapTo(this.superTypeRefs) { it as FirResolvedTypeRef }
-                        }
+                        val types = components.findTypesForSuperCandidates(superTypeRefs, containingCall)
+                        if (types.size == 1)
+                            buildResolvedTypeRef {
+                                source = superReferenceContainer.source?.fakeElement(FirFakeSourceElementKind.SuperCallImplicitType)
+                                type = types.single()
+                            }
+                        else
+                            buildErrorTypeRef {
+                                source = superReferenceContainer.source
+                                // NB: NOT_A_SUPERTYPE is reported by a separate checker
+                                diagnostic = ConeStubDiagnostic(ConeSimpleDiagnostic("Ambiguous supertype", DiagnosticKind.Other))
+                            }
                     }
                 }
                 superReferenceContainer.resultType = resultType

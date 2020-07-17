@@ -7,7 +7,6 @@ package org.jetbrains.kotlinx.serialization.compiler.diagnostic;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.kotlin.diagnostics.*;
-import org.jetbrains.kotlin.psi.KtAnnotation;
 import org.jetbrains.kotlin.psi.KtAnnotationEntry;
 import org.jetbrains.kotlin.types.KotlinType;
 
@@ -33,6 +32,7 @@ public interface SerializationErrors {
     DiagnosticFactory0<PsiElement> INCORRECT_TRANSIENT = DiagnosticFactory0.create(WARNING);
 
     DiagnosticFactory3<KtAnnotationEntry, String, String, String> REQUIRED_KOTLIN_TOO_HIGH = DiagnosticFactory3.create(ERROR);
+    DiagnosticFactory3<KtAnnotationEntry, String, String, String> PROVIDED_RUNTIME_TOO_LOW = DiagnosticFactory3.create(ERROR);
 
     @SuppressWarnings("UnusedDeclaration")
     Object _initializer = new Object() {

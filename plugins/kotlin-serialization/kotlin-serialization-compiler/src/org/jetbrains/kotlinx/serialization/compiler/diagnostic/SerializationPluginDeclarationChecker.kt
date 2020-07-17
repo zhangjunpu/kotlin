@@ -43,11 +43,33 @@ open class SerializationPluginDeclarationChecker : DeclarationChecker {
         if (!canBeSerializedInternally(descriptor, declaration, context.trace)) return
         if (declaration !is KtPureClassOrObject) return
         // todo: cache value with versions
-        VersionReader.getVersionsForCurrentModule(descriptor.module)?.let { checkMinKotlin(it, descriptor, context.trace) }
+        VersionReader.getVersionsForCurrentModule(descriptor.module)?.let {
+            checkMinKotlin(it, descriptor, context.trace)
+            checkMinRuntime(it, descriptor, context.trace)
+        }
         val props = buildSerializableProperties(descriptor, context.trace) ?: return
         checkCorrectTransientAnnotationIsUsed(descriptor, props.serializableProperties, context.trace)
         checkTransients(declaration, context.trace)
         analyzePropertiesSerializers(context.trace, descriptor, props.serializableProperties)
+    }
+
+    private fun checkMinRuntime(versions: VersionReader.RuntimeVersions, descriptor: ClassDescriptor, trace: BindingTrace) {
+        // if RuntimeVersions are present, but implementation version is not,
+        // it means that we are reading from jar which does not have this manifest parameter - a pre-1.0 serialization runtime.
+        // For non-JAR distributions (klib, js) this method is not invoked, since getVersionsForCurrentModule
+        // unable to read from them
+        if (!versions.implementationVersionMatchSupported()) {
+            descriptor.onSerializableAnnotation {
+                trace.report(
+                    SerializationErrors.PROVIDED_RUNTIME_TOO_LOW.on(
+                        it,
+                        versions.implementationVersion?.toString() ?: "too low",
+                        KotlinCompilerVersion.getVersion() ?: "unknown",
+                        VersionReader.MINIMAL_SUPPORTED_VERSION.toString(),
+                    )
+                )
+            }
+        }
     }
 
     private fun checkMinKotlin(versions: VersionReader.RuntimeVersions, descriptor: ClassDescriptor, trace: BindingTrace) {
@@ -56,9 +78,9 @@ open class SerializationPluginDeclarationChecker : DeclarationChecker {
             trace.report(
                 SerializationErrors.REQUIRED_KOTLIN_TOO_HIGH.on(
                     it,
-                    KotlinCompilerVersion.getVersion() ?: "N/A",
+                    KotlinCompilerVersion.getVersion() ?: "too low",
+                    versions.implementationVersion?.toString() ?: "unknown",
                     versions.requireKotlinVersion?.toString() ?: "N/A",
-                    versions.implementationVersion?.toString() ?: "N/A"
                 )
             )
         }

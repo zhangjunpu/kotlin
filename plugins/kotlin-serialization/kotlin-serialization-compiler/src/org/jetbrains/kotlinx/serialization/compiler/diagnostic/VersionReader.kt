@@ -21,6 +21,10 @@ object VersionReader {
             val current = requireNotNull(KotlinCompilerVersion.getVersion()?.let(ApiVersion.Companion::parse))
             return requireKotlinVersion == null || requireKotlinVersion <= current
         }
+
+        fun implementationVersionMatchSupported(): Boolean {
+            return implementationVersion != null && implementationVersion >= MINIMAL_SUPPORTED_VERSION
+        }
     }
 
     fun getVersionsFromManifest(runtimeLibraryPath: File): RuntimeVersions {
@@ -29,7 +33,7 @@ object VersionReader {
         return RuntimeVersions(version, kotlinVersion)
     }
 
-    val MINIMAL_SUPPORTED_VERSION = ApiVersion.parse("1.0-M1")
+    val MINIMAL_SUPPORTED_VERSION = ApiVersion.parse("1.0-M1-SNAPSHOT")!!
 
     private val REQUIRE_KOTLIN_VERSION = Attributes.Name("Require-Kotlin-Version")
     private const val CLASS_SUFFIX = "!/kotlinx/serialization/KSerializer.class"

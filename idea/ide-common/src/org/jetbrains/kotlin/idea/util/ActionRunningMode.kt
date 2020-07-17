@@ -6,10 +6,12 @@
 package org.jetbrains.kotlin.idea.util
 
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.command.CommandProcessor
 
 enum class ActionRunningMode {
     RUN_IN_CURRENT_THREAD,
-    RUN_IN_EDT
+    RUN_IN_EDT,
+    RUN_IN_EDT_UNDO_TRANSPARENT
 }
 
 inline fun <T> ActionRunningMode.runAction(crossinline action: () -> T): T = when (this) {
@@ -20,6 +22,17 @@ inline fun <T> ActionRunningMode.runAction(crossinline action: () -> T): T = whe
         var result: T? = null
         ApplicationManager.getApplication().invokeAndWait {
             result = ApplicationManager.getApplication().runWriteAction<T> { action() }
+        }
+        result!!
+    }
+    ActionRunningMode.RUN_IN_EDT_UNDO_TRANSPARENT -> {
+        var result: T? = null
+        ApplicationManager.getApplication().invokeAndWait {
+            ApplicationManager.getApplication().runWriteAction {
+                CommandProcessor.getInstance().runUndoTransparentAction {
+                    result = action()
+                }
+            }
         }
         result!!
     }
